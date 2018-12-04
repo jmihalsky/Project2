@@ -3,7 +3,7 @@ CREATE DATABASE slist;
 
 USE slist;
 
-CREATE TABLE usr (
+CREATE TABLE Usr (
     UserID int NOT NULL AUTO_INCREMENT,
     username varchar(20) NOT NULL,
     pword varchar(40) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE usr (
     PRIMARY KEY (UserID)
 );
 
-CREATE TABLE posts (
+CREATE TABLE Posts (
     PostID int NOT NULL AUTO_INCREMENT,
 	UserID int NOT NULL,
     LocationName varchar(60) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE posts (
     PRIMARY KEY (PostID, UserID)
 );
 
-CREATE TABLE comments (
+CREATE TABLE Comments (
     CommentID int NOT NULL AUTO_INCREMENT,
     PostID int NOT NULL,
     UserID int NOT NULL,
