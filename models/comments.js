@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes){
         comment_id: DataTypes.UUID,
         post_id: DataTypes.INTEGER,
         usr_id: DataTypes.INTEGER,
-        CommentText: DataTypes.STRING,
+        CommentText: DataTypes.TEXT,
         CommentRating: DataTypes.INTEGER
     });
 
