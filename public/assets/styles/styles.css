@@ -2,5 +2,19 @@ body {
   background: #38ef7d;
   background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
   background: linear-gradient(to right, #38ef7d, #11998e);
+}
+
+.jumbotron {
+  background-color: #131313;
   text-align: center;
+  margin: 0px;
+}
+
+.navbar{
+  background-color: #ffffff;
+}
+
+.button {
+  padding-right: 20px;
+  padding-left: 20px;
 }
