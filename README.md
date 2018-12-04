@@ -1,4 +1,4 @@
-<img src="/public/images/banner.png" alt="banner">
+<img src="/public/assets/img/banner.png" alt="banner">
 
 <hr>
 
