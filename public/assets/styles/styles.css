@@ -50,3 +50,16 @@ margin: 10px;
   cursor: pointer;
   }
   
+.icon {
+  width: 200px;
+  height: auto;
+  padding: 10px;
+}
+
+.media {
+  padding: 15px;
+}
+
+.media-body {
+  padding: 10px;
+}
