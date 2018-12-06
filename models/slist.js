@@ -5,6 +5,11 @@ var slist = {
         orm.all_posts(function(res){
             qryres(res);
         });
+    },
+    city: function(qryres){
+        orm.city_search(function(res){
+            qryres(res);
+        });
     }
 };
 
