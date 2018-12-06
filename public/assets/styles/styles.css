@@ -1,0 +1,65 @@
+body {
+  background: #38ef7d;
+  background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
+  background: linear-gradient(to right, #38ef7d, #11998e);
+}
+
+.jumbotron {
+  background-color: #131313;
+  text-align: center;
+  margin: 0px;
+}
+
+.navbar{
+  background-color: #ffffff;
+}
+
+.form-inline {
+  margin: auto;
+}
+
+.form-inline label {
+  padding-right: 10px;
+  padding-left: 5px;
+}
+
+.form-inline .form-check-input{
+  margin: auto;
+  position: inherit;
+}
+
+.login{
+float: right;
+margin-top: 20px;
+margin-right: 50px;
+font-size: 24px;
+padding: 10px;
+background: linear-gradient(to right, #38ef7d, #11998e);
+border-radius: 7px;
+border-color: black;
+cursor: pointer;
+}
+
+.submit{
+margin: 10px;
+  font-size: 18px;
+  padding: 10px;
+  background: linear-gradient(to right, #38ef7d, #11998e);
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  }
+  
+.icon {
+  width: 200px;
+  height: auto;
+  padding: 10px;
+}
+
+.media {
+  padding: 15px;
+}
+
+.media-body {
+  padding: 10px;
+}
