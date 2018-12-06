@@ -1,3 +1,24 @@
 <div>
-  <h2> Loading Index.handlebars file</h2>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <ul class="list-unstyled">
+          {{#each sposts}}
+          <li class="media" id={{this.PostID}}>
+            <img class="icon" src="{{this.post_image}}">
+            <div class="media-body">
+              <h3 class="mt-0 mb-1">{{this.LocationName}}</h3>
+              <h5>Current Rating: {{this.PostRating}}</h5>
+              <h5>Address: {{this.LocAddr}}, {{this.City}} CA {{this.Zip}}</h5>
+              {{this.PostText}}
+            </div>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="col-8">
+        {{!-- MAP INFO HERE --}}
+      </div>
+    </div>
+  </div>
 </div>
