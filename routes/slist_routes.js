@@ -19,4 +19,10 @@ router.get("/all_slist", function (req, res) {
     });
 });
 
+router.get("/city_search/:city",function(req,res){
+    slist.city(req.param.city,function(sposts){
+        res.render("index",{s_posts: sposts});
+    });
+});
+
 module.exports = router;
