@@ -2,8 +2,6 @@ body {
   background: #38ef7d;
   background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
   background: linear-gradient(to right, #38ef7d, #11998e);
-  color: white;
-  text-shadow: 2px 2px 4px #000;
 }
 
 .banner {
@@ -14,6 +12,7 @@ body {
 .navbar {
   padding: 0;
   background-color: #131313;
+  color: white;
 }
 
 .form-inline {
