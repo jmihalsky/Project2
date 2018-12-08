@@ -1,4 +1,13 @@
 <div>
-    <h1>Loading post.handlebars file</h1>
-    {{sposts.LocationName}}
+    {{#each sposts}}
+    <li class="media" id={{this.PostID}}>
+        <img class="icon" src="{{this.post_image}}">
+        <div class="media-body">
+            <h3 class="mt-0 mb-1">{{this.LocationName}}</h3>
+            <h5>Current Rating: {{this.PostRating}}</h5>
+            <h5>Address: {{this.LocAddr}}, {{this.City}} {{this.State}} {{this.Zip}}</h5>
+            {{this.PostText}}
+        </div>
+    </li>
+    {{/each}}
 </div>

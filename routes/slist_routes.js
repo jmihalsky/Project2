@@ -14,22 +14,23 @@ router.get("/", function (req, res) {
     });
 });
 
-router.get("/post/:id",function(req,res){
-    slist.posts(req.params.id,function(sposts){
+router.get("/post/:id", function (req, res) {
+    slist.posts(req.params.id, function (sposts) {
+        console.log(sposts);
         var slistposts = {
             sposts: sposts
-        };
-        res.render("post",slistposts);
+        }
+        res.render("post", slistposts);
     });
 });
-    
 
-router.get("/city_search/:city",function(req,res){
-    slist.city(req.param.city,function(sposts){
+
+router.get("/city_search/:city", function (req, res) {
+    slist.city(req.param.city, function (sposts) {
         var slistposts = {
             sposts: sposts
         };
-        res.render("search",slistposts);
+        res.render("search", slistposts);
     });
 });
 
@@ -71,5 +72,6 @@ router.get('/', function(req, res, next){
 router.get('/', function(req, res, next) {
     res.send(req.isAuthenticated());
  });
+
 
 module.exports = router;
