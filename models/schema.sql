@@ -18,6 +18,7 @@ CREATE TABLE Posts (
     LocationName varchar(60) NOT NULL,
 	LocAddr varchar(60),
     City varchar(30) NOT NULL,
+    State varchar(2) NOT NULL,
     Zip int,
     PostText text NOT NULL,
     PostRating int NOT NULL,
