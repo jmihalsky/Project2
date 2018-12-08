@@ -2,16 +2,18 @@ body {
   background: #38ef7d;
   background: -webkit-linear-gradient(to right, #38ef7d, #11998e);
   background: linear-gradient(to right, #38ef7d, #11998e);
+  color: white;
+  text-shadow: 2px 2px 4px #000;
 }
 
-.jumbotron {
-  background-color: #131313;
+.banner {
   text-align: center;
-  margin: 0px;
+  background-color: rgba(51, 51, 51, 0.5);
 }
 
-.navbar{
-  background-color: #ffffff;
+.navbar {
+  padding: 0;
+  background-color: #131313;
 }
 
 .form-inline {
@@ -23,33 +25,25 @@ body {
   padding-left: 5px;
 }
 
-.form-inline .form-check-input{
+.form-inline .form-check-input {
   margin: auto;
   position: inherit;
 }
 
-.login{
-float: right;
-margin-top: 20px;
-margin-right: 50px;
-font-size: 24px;
-padding: 10px;
-background: linear-gradient(to right, #38ef7d, #11998e);
-border-radius: 7px;
-border-color: black;
-cursor: pointer;
+.login {
+  float: right;
 }
 
-.submit{
-margin: 10px;
-  font-size: 18px;
-  padding: 10px;
-  background: linear-gradient(to right, #38ef7d, #11998e);
+.button {
+  margin: 10px;
+  background: linear-gradient(to bottom, #24c485, #181818);
   border-radius: 7px;
-  border: none;
+  border-color: black;
   cursor: pointer;
-  }
-  
+  color: white;
+  text-shadow: 2px 2px 4px #000;
+}
+
 .icon {
   width: 200px;
   height: auto;
