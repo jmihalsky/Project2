@@ -15,6 +15,13 @@ var orm = {
             if(eff) throw err;
             qryres(res);
         });
+    },
+    post_info: function(post_id,qryres){
+        var qrystrg = "select Posts.*, Usr.username from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.PostID = " + post_id;
+        connection.query(qrystrg,function(err,res){
+            if(eff) throw err;
+            qryres(res);
+        });
     }
 };
 
