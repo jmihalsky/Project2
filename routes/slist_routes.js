@@ -40,8 +40,14 @@ router.get("/city_search/:city", function (req, res) {
         res.render("search", slistposts);
     });
 });
-
-
+router.get("/zip_search/:zip", function (req, res) {
+    slist.zip(req.param.zip, function (sposts) {
+        var slistposts = {
+            sposts: sposts
+        };
+        res.render("search", slistposts);
+    });
+});
 ///look at stuff below!
 // User Login Route
 router.get("/", function (req, res, next) {
