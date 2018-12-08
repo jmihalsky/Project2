@@ -11,6 +11,11 @@ var slist = {
             qryres(res);
         });
     },
+    zip: function (qryres) {
+        orm.zip_search(function (res) {
+            qryres(res);
+        });
+    },
     posts: function (post_id, qryres) {
         orm.post_info(post_id, function (res) {
             qryres(res);
