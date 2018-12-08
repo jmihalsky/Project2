@@ -31,3 +31,5 @@ router.get("/city_search/:city",function(req,res){
         res.render("search",slistposts);
     });
 });
+
+module.exports = router;
