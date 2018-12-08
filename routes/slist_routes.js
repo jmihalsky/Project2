@@ -13,5 +13,21 @@ router.get("/", function (req, res) {
     });
 });
 
+router.get("/post/:id",function(req,res){
+    slist.posts(req.params.id,function(sposts){
+        var slistposts = {
+            sposts: sposts
+        };
+        res.render("post",slistposts);
+    });
+});
+    
 
-module.exports = router;
+router.get("/city_search/:city",function(req,res){
+    slist.city(req.param.city,function(sposts){
+        var slistposts = {
+            sposts: sposts
+        };
+        res.render("search",slistposts);
+    });
+});
