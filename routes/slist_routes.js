@@ -24,6 +24,9 @@ router.get("/post/:id", function (req, res) {
     });
 });
 
+router.get("/login", function (req, res) {
+    res.render("login");
+});
 
 router.get("/city_search/:city", function (req, res) {
     slist.city(req.param.city, function (sposts) {
@@ -35,43 +38,43 @@ router.get("/city_search/:city", function (req, res) {
 });
 
 // User Login Route
-router.get("/", function(req,res,next){
+router.get("/", function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views/login.handlebars'));
- });
- 
- router.post('/',
+});
+
+router.post('/',
     passport.authenticate('local', {
         successRedirect: '/users',
         failureRedirect: '/'
     })
- );
+);
 
 //  Register New User Route
-router.get('/', function(req, res, next){
+router.get('/', function (req, res, next) {
     res.sendFile(path.resolve(__dirname, '../views/register.html'));
- });
- 
- router.post('/', function(req,res,next) {
-   pg.connect(connectionString, function(err, client){
- 
-     var query = client.query('INSERT INTO users (username, password) VALUES ($1, $2)', [request.body.username, request.body.password]);
- 
-     query.on('error', function(err){
-       console.log(err);
-     })
- 
-     query.on('end', function(){
-       response.sendStatus(200);
-       client.end();
-     })
- 
-   })
- });
+});
+
+router.post('/', function (req, res, next) {
+    pg.connect(connectionString, function (err, client) {
+
+        var query = client.query('INSERT INTO users (username, password) VALUES ($1, $2)', [request.body.username, request.body.password]);
+
+        query.on('error', function (err) {
+            console.log(err);
+        })
+
+        query.on('end', function () {
+            response.sendStatus(200);
+            client.end();
+        })
+
+    })
+});
 
 //  User authenticated
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     res.send(req.isAuthenticated());
- });
+});
 
 
 module.exports = router;

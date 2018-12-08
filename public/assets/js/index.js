@@ -7,11 +7,17 @@ $(".button-learn").on("click", function (event) {
   window.location = url;
 });
 
+
+$(".login").on("click", function (event) {
+  event.preventDefault();
+  window.location = "/login";
+})
+
+
 //Search button
 $("").on("click", function (event) {
 
   //if else statement to tell if the city or zip button is selected... run different ajax calls....
-
 
 })
 
