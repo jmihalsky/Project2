@@ -13,15 +13,22 @@ router.get("/", function (req, res) {
     });
 });
 
-router.get("/all_slist", function (req, res) {
-    slist.all(function (sposts) {
-        res.render("index", { s_posts: sposts });
+router.get("/post/:id",function(req,res){
+    slist.posts(req.params.id,function(sposts){
+        var slistposts = {
+            sposts: sposts
+        };
+        res.render("post",slistposts);
     });
 });
+    
 
 router.get("/city_search/:city",function(req,res){
     slist.city(req.param.city,function(sposts){
-        res.render("index",{s_posts: sposts});
+        var slistposts = {
+            sposts: sposts
+        };
+        res.render("search",slistposts);
     });
 });
 
