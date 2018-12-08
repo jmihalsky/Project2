@@ -4,6 +4,7 @@ var slist = require("../models/slist.js");
 var passport = require('passport');
 var path = require('path');
 
+//homepage
 router.get("/", function (req, res) {
     slist.all(function (sposts) {
         var slistposts = {
@@ -14,6 +15,7 @@ router.get("/", function (req, res) {
     });
 });
 
+//post pages
 router.get("/post/:id", function (req, res) {
     slist.posts(req.params.id, function (sposts) {
         console.log(sposts);
@@ -24,10 +26,12 @@ router.get("/post/:id", function (req, res) {
     });
 });
 
+//login page
 router.get("/login", function (req, res) {
     res.render("login");
 });
 
+//search page
 router.get("/city_search/:city", function (req, res) {
     slist.city(req.param.city, function (sposts) {
         var slistposts = {
@@ -37,6 +41,8 @@ router.get("/city_search/:city", function (req, res) {
     });
 });
 
+
+///look at stuff below!
 // User Login Route
 router.get("/", function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views/login.handlebars'));
