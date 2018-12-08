@@ -31,5 +31,6 @@ CREATE TABLE Comments (
     UserID int NOT NULL,
     CommentText text NOT NULL,
     CommentRating int NOT NULL,
+    comment_image varchar(50),
     PRIMARY KEY (CommentID, PostID, UserID)
 );
