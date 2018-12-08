@@ -13,4 +13,11 @@ $(".button-learn").on("click", function (event) {
   );
 });
 
+//Search button
+$("").on("click", function (event) {
+
+  //if else statement to tell if the city or zip button is selected... run different ajax calls....
+
+
+})
 
