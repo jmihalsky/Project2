@@ -5,8 +5,8 @@ var passport = require("passport");
 var path = require("path");
 
 //homepage
-router.get("/", function(req, res) {
-  slist.all(function(sposts) {
+router.get("/", function (req, res) {
+  slist.all(function (sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -16,32 +16,28 @@ router.get("/", function(req, res) {
 });
 
 //post pages
-router.get("/post/:id", function(req, res) {
-  slist.posts(req.params.id, function(sposts) {
-    console.log(sposts);
-    var slistposts = {
-      sposts: sposts
-    };
-    res.render("post", slistposts);
+router.get("/post/:id", function (req, res) {
+  slist.posts(req.params.id, function (sposts) {
+    res.render("post", sposts[0]);
   });
 });
 
 //login page
-router.get("/login", function(req, res) {
+router.get("/login", function (req, res) {
   res.render("login");
 });
 
 //search page
-router.get("/city_search/:city", function(req, res) {
-  slist.city(req.param.city, function(sposts) {
+router.get("/city_search/:city", function (req, res) {
+  slist.city(req.param.city, function (sposts) {
     var slistposts = {
       sposts: sposts
     };
     res.render("search", slistposts);
   });
 });
-router.get("/zip_search/:zip", function(req, res) {
-  slist.zip(req.param.zip, function(sposts) {
+router.get("/zip_search/:zip", function (req, res) {
+  slist.zip(req.param.zip, function (sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -50,7 +46,7 @@ router.get("/zip_search/:zip", function(req, res) {
 });
 ///look at stuff below!
 // User Login Route
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.sendFile(path.join(__dirname, "../views/login.handlebars"));
 });
 
@@ -63,24 +59,24 @@ router.post(
 );
 
 //  Register New User Route
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.sendFile(path.resolve(__dirname, "../views/register.html"));
 });
 
-router.post("/", function(req, res, next) {
+router.post("/", function (req, res, next) {
   pg.connect(
     connectionString,
-    function(err, client) {
+    function (err, client) {
       var query = client.query(
         "INSERT INTO users (username, password) VALUES ($1, $2)",
         [request.body.username, request.body.password]
       );
 
-      query.on("error", function(err) {
+      query.on("error", function (err) {
         console.log(err);
       });
 
-      query.on("end", function() {
+      query.on("end", function () {
         response.sendStatus(200);
         client.end();
       });
@@ -89,7 +85,7 @@ router.post("/", function(req, res, next) {
 });
 
 //  User authenticated
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.send(req.isAuthenticated());
 });
 
