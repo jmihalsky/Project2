@@ -1,13 +1,16 @@
 <div>
-    {{#each sposts}}
-    <li class="media" id={{this.PostID}}>
-        <img class="icon" src="{{this.post_image}}">
-        <div class="media-body">
-            <h3 class="mt-0 mb-1">{{this.LocationName}}</h3>
-            <h5>Current Rating: {{this.PostRating}}</h5>
-            <h5>Address: {{this.LocAddr}}, {{this.City}} {{this.State}} {{this.Zip}}</h5>
-            {{this.PostText}}
-        </div>
-    </li>
-    {{/each}}
+    <h1>{{LocationName}}</h1>
+    <p>Current Rating: {{PostRating}}</p>
+    <br>
+    <h3> {{LocAddr}} {{City}}, {{State}} {{Zip}}</h3>
+    <br>
+    <div>
+        <img src="{{post_image}}" width="600px" height="auto">
+    </div>
+    <br>
+    <h3>{{PostText}}</h3>
+</div>
+<br>
+<div>
+    COMMENTS
 </div>
