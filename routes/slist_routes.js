@@ -17,9 +17,14 @@ router.get("/", function (req, res) {
 //post pages
 router.get("/post/:id", function (req, res) {
   slist.posts(req.params.id, function (sposts) {
-    res.render("post", sposts[0]);
+    console.log(sposts);
+    slist.comments(req.params.id, function(scoms){
+      console.log(scoms);
+      res.render("post", {sposts: sposts, scoms: scoms});
+    });
   });
 });
+
 
 //login page
 router.get("/login", function (req, res) {
