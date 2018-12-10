@@ -26,6 +26,16 @@ var slist = {
       qryres(res);
     });
   },
+  dlt_comments: function (comment_id, qryres) {
+    orm.comment_dlt(comment_id, function(res){
+      qryres(res);
+    });
+  },
+  crt_comment: function (vals,qryres){
+    orm.comment_crt(vals, function(res){
+      qryres(res);
+    });
+  },
   createLocation: function (col, vals, qryres) {
     orm.create_location("Posts", col, vals, function (res) {
       qryres(res);

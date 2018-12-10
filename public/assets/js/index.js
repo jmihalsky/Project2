@@ -64,6 +64,55 @@ function checkSearch(zipState, cityState, searchParam) {
 };
 
 
+$(".delcomment").on("click", function(event) {
+  var id = $(this).val();
+  console.log("deleting");
+  // Send the DELETE request.
+  $.ajax("/api/comments/" + id, {
+    type: "DELETE"
+  }).then(function(response){
+    console.log("maybe do something");
+  });
+});
+
+$("input[name=rating]").on("click", function() {
+  console.log("click");
+  $("#ratings").val($(this).attr("value"));
+});
+
+
+$("#add-comm").submit(function(event){
+  event.preventDefault();
+  console.log("button working");
+});
+
+
+$(".update-form").on("submit", function(event) {
+  // Make sure to preventDefault on a submit event.
+  event.preventDefault();
+
+  var updatedComment = {
+    CommentRating: $("#ratings")
+      .val()
+      .trim(),
+    CommentText: $("#com")
+      .val()
+      .trim()
+  };
+
+  var id = $(this).data("id");
+
+  // Send the POST request.
+  $.ajax("/api/comments/" + id, {
+    type: "PUT",
+    data: updatedComment
+  }).then(function() {
+    console.log("updated comment");
+    // Reload the page to get the updated list
+    location.assign("/");
+  });
+});
+
 
 //add button (photo upload sent through /upload api call seperately)
 
@@ -115,6 +164,7 @@ $("#add").submit(function (event) {
     }
   );
 });
+
 
 
 

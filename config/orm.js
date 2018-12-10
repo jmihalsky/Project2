@@ -39,6 +39,33 @@ var orm = {
     connection.query(qrystrg, function (err, res) {
       if (err) throw err;
       qryres(res);
+
+    });
+  },
+  comment_dlt: function(comment_id,qryres){
+    var qrystrg = "delete from Comments where CommentID = " + comment_id;
+    connection.query(qrystrg, function(err,res){
+      if(err)
+      {
+        res.json = ({success: false});
+        qryres(res);
+      }
+      else
+      {
+        console.log("Deleted");
+        res.json = ({success: true});
+        qryres(res);
+      }
+    });
+  },
+  comment_crt: function(vals,qryres){
+    var qrystrg = "insert into Comments (PostID,UserID,CommentText,CommentRating) values( ?,?,?,?)";
+    connection.query(qrystrg,vals, function(err,res){
+      if(err)
+      {
+        throw err;
+      }
+
     })
   },
 
@@ -56,6 +83,7 @@ var orm = {
 
     connection.query(qrystring, function (err, res) {
       if (err) throw err;
+
       qryres(res);
     });
   }
