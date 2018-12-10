@@ -25,6 +25,22 @@ router.get("/post/:id", function (req, res) {
   });
 });
 
+// comment - delete route
+router.delete("/api/comments/:id",function(req,res){
+  console.log("deleting comment " + req.params.id);
+  slist.dlt_comments(req.params.id, function(result){
+    console.log(result);
+    res.result;
+  });
+});
+
+// comment - post route
+router.post("/api/comments/", function(req,res){
+  console.log([req.body.PostID, 1, req.body.CommentText, req.body.CommentText]);
+  slist.crt_comment([req.body.PostID, 1, req.body.CommentText, req.body.CommentText],function(result){
+    res.json({success: true});
+  })
+});
 
 //login page
 router.get("/login", function (req, res) {
