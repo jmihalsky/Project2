@@ -1,4 +1,5 @@
 
+
 //Clicking a learn more button on a post
 $(".button-learn").on("click", function (event) {
   event.preventDefault();
@@ -7,7 +8,7 @@ $(".button-learn").on("click", function (event) {
   window.location = url;
 });
 
-
+//login button
 $(".login").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
@@ -111,3 +112,62 @@ $(".update-form").on("submit", function(event) {
     location.assign("/");
   });
 });
+
+
+//add button (photo upload sent through /upload api call seperately)
+
+$("#add").submit(function (event) {
+  event.preventDefault();
+  //determines rating
+  var rating = 0;
+  if ($("#rate1").is(":checked")) {
+    rating = 1;
+  };
+  if ($("#rate2").is(":checked")) {
+    rating = 2;
+  };
+  if ($("#rate3").is(":checked")) {
+    rating = 3;
+  };
+  if ($("#rate4").is(":checked")) {
+    rating = 4;
+  };
+  if ($("#rate5").is(":checked")) {
+    rating = 5;
+  };
+
+  var zipNum = Number($("#inputZip").val().trim());
+
+  //set up object ///need to change user id for future!
+  var newLocation = {
+    UserID: 1,
+    LocationName: $("#inputLocation").val().trim(),
+    LocAddr: $("#inputAddress").val().trim(),
+    City: $("#inputCity").val().trim(),
+    State: $("#inputState").val().trim(),
+    Zip: zipNum,
+    PostText: $("#inputDescription").val().trim(),
+    PostRating: rating,
+    post_image: "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name
+  };
+
+  console.log(newLocation);
+  // Send the POST request.
+  $.ajax("/newlocation", {
+    type: "POST",
+    data: newLocation
+  }).then(
+    function () {
+      console.log("posted new location");
+      // Reload the page 
+      location.reload();
+    }
+  );
+});
+
+
+
+
+
+
+

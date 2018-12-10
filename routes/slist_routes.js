@@ -4,6 +4,7 @@ var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
 
+
 //homepage
 router.get("/", function (req, res) {
   slist.all(function (sposts) {
@@ -14,13 +15,14 @@ router.get("/", function (req, res) {
   });
 });
 
+
 //post pages
 router.get("/post/:id", function (req, res) {
   slist.posts(req.params.id, function (sposts) {
     console.log(sposts);
-    slist.comments(req.params.id, function(scoms){
+    slist.comments(req.params.id, function (scoms) {
       console.log(scoms);
-      res.render("post", {sposts: sposts, scoms: scoms});
+      res.render("post", { sposts: sposts, scoms: scoms });
     });
   });
 });
@@ -65,6 +67,47 @@ router.get("/zip_search/:zip", function (req, res) {
     res.render("search", slistposts);
   });
 });
+
+
+//Uploading "new post images!"
+router.post("/upload", function (req, res) {
+  var photo;
+  var uploadPath;
+
+  if (Object.keys(req.files).length == 0) {
+    res.status(400).send("No files were uploaded.");
+    return;
+  }
+  console.log("req.files >>>", req.files);
+
+  photo = req.files.locationPhoto;
+
+  uploadPath = __dirname + "/assets/img/post_img/" + photo.name;
+
+  photo.mv(uploadPath, function (err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    console.log("File uploaded to " + uploadPath);
+  });
+});
+
+
+//Sending new Location to MySQL
+router.post("/newlocation", function (req, res) {
+  slist.createLocation([
+    "UserID", "LocationName", "LocAddr", "City", "State", "Zip", "PostText", "PostRating", "post_image"
+  ], [
+      req.body.UserID, `"` + req.body.LocationName + `"`, `"` + req.body.LocAddr + `"`, `"` + req.body.City + `"`, `"` + req.body.State + `"`, req.body.Zip, `"` + req.body.PostText + `"`, req.body.PostRating, `"` + req.body.post_image + `"`
+    ], function (sposts) {
+      var slistposts = {
+        sposts: sposts
+      };
+      res.render("index", slistposts);
+    });
+});
+
+
 ///look at stuff below!
 // User Login Route
 router.get("/", function (req, res, next) {

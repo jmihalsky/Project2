@@ -6,13 +6,13 @@ var slist = {
       qryres(res);
     });
   },
-city: function(srchcity, qryres) {
-    orm.city_search(srchcity,function(res) {
+  city: function (srchcity, qryres) {
+    orm.city_search(srchcity, function (res) {
       qryres(res);
     });
   },
-  zip: function(srchzip, qryres) {
-    orm.zip_search(srchzip,function(res) {
+  zip: function (srchzip, qryres) {
+    orm.zip_search(srchzip, function (res) {
       qryres(res);
     });
   },
@@ -22,7 +22,7 @@ city: function(srchcity, qryres) {
     });
   },
   comments: function (post_id, qryres) {
-    orm.comment_info(post_id, function(res){
+    orm.comment_info(post_id, function (res) {
       qryres(res);
     });
   },
@@ -33,6 +33,11 @@ city: function(srchcity, qryres) {
   },
   crt_comment: function (vals,qryres){
     orm.comment_crt(vals, function(res){
+      qryres(res);
+    });
+  },
+  createLocation: function (col, vals, qryres) {
+    orm.create_location("Posts", col, vals, function (res) {
       qryres(res);
     });
   }
