@@ -1,4 +1,5 @@
 
+
 //Clicking a learn more button on a post
 $(".button-learn").on("click", function (event) {
   event.preventDefault();
@@ -7,7 +8,7 @@ $(".button-learn").on("click", function (event) {
   window.location = url;
 });
 
-
+//login button
 $(".login").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
@@ -61,3 +62,49 @@ function checkSearch(zipState, cityState, searchParam) {
     console.log("nothing worked");
   }
 };
+
+//add button
+$("#add").submit(function (event) {
+  event.preventDefault();
+  var rating = 0;
+
+  if ($("#rate1").is(":checked")) {
+    rating = 1;
+  };
+  if ($("#rate2").is(":checked")) {
+    rating = 2;
+  };
+  if ($("#rate3").is(":checked")) {
+    rating = 3;
+  };
+  if ($("#rate4").is(":checked")) {
+    rating = 4;
+  };
+  if ($("#rate5").is(":checked")) {
+    rating = 5;
+  };
+
+  var newLocation = {
+    LocationName: $("#inputLocation").val().trim(),
+    LocAddr: $("#inputAddress").val().trim(),
+    City: $("#inputCity").val().trim(),
+    State: $("#inputState").val().trim(),
+    Zip: $("#inputZip").val().trim(),
+    PostText: $("#inputDescription").val().trim(),
+    PostRating: rating,
+    post_image: $("#inputPhoto").val().trim()
+  };
+
+  console.log(newLocation);
+
+  // $.post("/post/new/", newLocation)
+  //   .then(function (data) {
+  //     console.log("add.html", data);
+  //     location.reload();
+  //   });
+
+});
+
+
+
+
