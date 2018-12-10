@@ -63,11 +63,14 @@ function checkSearch(zipState, cityState, searchParam) {
   }
 };
 
-//add button
+
+
+//add button (photo upload sent through /upload api call seperately)
+
 $("#add").submit(function (event) {
   event.preventDefault();
+  //determines rating
   var rating = 0;
-
   if ($("#rate1").is(":checked")) {
     rating = 1;
   };
@@ -84,26 +87,36 @@ $("#add").submit(function (event) {
     rating = 5;
   };
 
+  var zipNum = Number($("#inputZip").val().trim());
+
+  //set up object ///need to change user id for future!
   var newLocation = {
+    UserID: 1,
     LocationName: $("#inputLocation").val().trim(),
     LocAddr: $("#inputAddress").val().trim(),
     City: $("#inputCity").val().trim(),
     State: $("#inputState").val().trim(),
-    Zip: $("#inputZip").val().trim(),
+    Zip: zipNum,
     PostText: $("#inputDescription").val().trim(),
     PostRating: rating,
-    post_image: $("#inputPhoto").val().trim()
+    post_image: "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name
   };
 
   console.log(newLocation);
-
-  // $.post("/post/new/", newLocation)
-  //   .then(function (data) {
-  //     console.log("add.html", data);
-  //     location.reload();
-  //   });
-
+  // Send the POST request.
+  $.ajax("/newlocation", {
+    type: "POST",
+    data: newLocation
+  }).then(
+    function () {
+      console.log("posted new location");
+      // Reload the page 
+      location.reload();
+    }
+  );
 });
+
+
 
 
 

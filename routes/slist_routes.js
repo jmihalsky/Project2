@@ -3,6 +3,8 @@ var router = express.Router();
 var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
+var app = express();
+
 
 //homepage
 router.get("/", function (req, res) {
@@ -51,6 +53,44 @@ router.get("/zip_search/:zip", function (req, res) {
   });
 });
 
+
+//Uploading "new post images!"
+router.post("/upload", function (req, res) {
+  var photo;
+  var uploadPath;
+
+  if (Object.keys(req.files).length == 0) {
+    res.status(400).send("No files were uploaded.");
+    return;
+  }
+  console.log("req.files >>>", req.files);
+
+  photo = req.files.locationPhoto;
+
+  uploadPath = __dirname + "/assets/img/post_img/" + photo.name;
+
+  photo.mv(uploadPath, function (err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    console.log("File uploaded to " + uploadPath);
+  });
+});
+
+
+//Sending new Location to MySQL
+router.post("/newlocation", function (req, res) {
+  slist.createLocation([
+    "UserID", "LocationName", "LocAddr", "City", "State", "Zip", "PostText", "PostRating", "post_image"
+  ], [
+      req.body.UserID, `"` + req.body.LocationName + `"`, `"` + req.body.LocAddr + `"`, `"` + req.body.City + `"`, `"` + req.body.State + `"`, req.body.Zip, `"` + req.body.PostText + `"`, req.body.PostRating, `"` + req.body.post_image + `"`
+    ], function (sposts) {
+      var slistposts = {
+        sposts: sposts
+      };
+      res.render("index", slistposts);
+    });
+});
 
 
 ///look at stuff below!
