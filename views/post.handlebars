@@ -1,16 +1,20 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>{{LocationName}}</h1>
-            <p class="starability-result" data-rating={{PostRating}}></p>
+            {{#each sposts}}
+            <h1>{{this.LocationName}}</h1>
+            <p class="starability-result" data-rating={{this.PostRating}}></p>
             <br>
-            <h3> {{LocAddr}} {{City}}, {{State}} {{Zip}}</h3>
+            <h3> {{this.LocAddr}} {{this.City}}, {{this.State}} {{this.Zip}}</h3>
             <br>
             <div>
-                <img src="{{post_image}}" width="600px" height="auto">
+                <img src="{{this.post_image}}" width="600px" height="auto">
             </div>
             <br>
-            <h4>{{PostText}}</h4>
+            <h4>{{this.PostText}}</h4>
+            <br>
+            <h6>{{this.post_user}}</h6>
+            {{/each}}
         </div>
     </div>
 
@@ -20,9 +24,9 @@
 
             <!-- Pass in data from server.js -->
             <ul>
-                {{#each scomments}}
+                {{#each scoms}}
                 <li>
-                    <p><span class="label">User:</span> {{this.UserId}}</p>
+                    <p><span class="label">User:</span> {{this.comm_user}}</p>
                     <p class="starability-result" data-rating={{this.CommentRating}}></p>
                     <p><span class="label">Review:</span> {{this.CommentText}}</p>
 

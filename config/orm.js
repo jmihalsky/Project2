@@ -27,13 +27,18 @@ var orm = {
     });
   },
   post_info: function(post_id, qryres) {
-    var qrystrg =
-      "select Posts.*, Usr.username post_user, Comments.CommentText, Comments.CommentRating, Comments.comment_image, U2.username comm_user from Posts inner join Usr on Posts.UserID = Usr.UserID  left join Comments on Posts.PostID = Comments.PostID inner join Usr U2 on Comments.UserID = U2.UserID where Posts.PostID = " +
-      post_id;
+    var qrystrg = "select Posts.*, Usr.username post_user from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.PostID = " + post_id;
     connection.query(qrystrg, function(err, res) {
       if (err) throw err;
       qryres(res);
     });
+  },
+  comment_info: function(post_id,qryres){
+    var qrystrg =  "select Comments.*, Usr.username comm_user from Comments inner join Usr on Comments.UserID = Usr.UserID where Comments.PostID = " + post_id;
+    connection.query(qrystrg, function(err,res) {
+      if(err) throw err;
+      qryres(res);
+    })
   }
 };
 
