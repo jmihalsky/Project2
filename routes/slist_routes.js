@@ -29,15 +29,16 @@ router.get("/login", function (req, res) {
 
 //search page
 router.get("/city_search/:city", function (req, res) {
-  slist.city(req.param.city, function (sposts) {
+  slist.city(req.params.city, function (sposts) {
     var slistposts = {
       sposts: sposts
     };
     res.render("search", slistposts);
   });
 });
+
 router.get("/zip_search/:zip", function (req, res) {
-  slist.zip(req.param.zip, function (sposts) {
+  slist.zip(req.params.zip, function (sposts) {
     var slistposts = {
       sposts: sposts
     };

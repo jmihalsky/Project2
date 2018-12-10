@@ -12,20 +12,17 @@ var orm = {
   },
   city_search: function(schcity, qryres) {
     var qrystrg =
-      "select Posts.*, Usr.username from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.City like '%" +
-      schcity +
-      "%'";
+      "select Posts.*, Usr.username from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.City like '%" + schcity + "%'";
     connection.query(qrystrg, function(err, res) {
-      if (eff) throw err;
+      if (err) throw err;
       qryres(res);
     });
   },
   zip_search: function(schzip, qryres) {
     var qrystrg =
-      "select Posts.*, Usr.username from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.Zip = " +
-      schzip;
+      "select Posts.*, Usr.username from Posts inner join Usr on Posts.UserID = Usr.UserID where Posts.Zip like '%" + schzip + "%'";
     connection.query(qrystrg, function(err, res) {
-      if (eff) throw err;
+      if (err) throw err;
       qryres(res);
     });
   },
