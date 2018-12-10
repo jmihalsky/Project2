@@ -60,26 +60,4 @@ function checkSearch(zipState, cityState, searchParam) {
   } else {
     console.log("nothing worked");
   }
-
-
-  // if ($("#zip").is(':checked')) {
-  //   var zip = $("#search_text").val();
-  //   var url = ("/zip_search/" + zip);
-  //   window.location = url;
-  //   return;
-
-  // } else if ($("#city").is(':checked')) {
-  //   var city = $("#search_text").val();
-  //   var url = ("/city_search/" + city);
-  //   window.location = url;
-  //   return;
-
-  // } else if (($("#city").is(':checked')) && ($("#city").is(':checked'))) {
-  //   alert("Please only search by the Zip Code OR City.")
-  //   return;
-
-  // } else {
-  //   alert("Please check Zip OR City box to search");
-  // };
-
 };
