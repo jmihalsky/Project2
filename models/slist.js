@@ -6,13 +6,13 @@ var slist = {
       qryres(res);
     });
   },
-  city: function (schcity, qryres) {
-    orm.city_search(schcity, function (res) {
+city: function(srchcity, qryres) {
+    orm.city_search(srchcity,function(res) {
       qryres(res);
     });
   },
-  zip: function (schzip, qryres) {
-    orm.zip_search(schzip, function (res) {
+  zip: function(srchzip, qryres) {
+    orm.zip_search(srchzip,function(res) {
       qryres(res);
     });
   },
