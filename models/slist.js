@@ -20,6 +20,11 @@ city: function(srchcity, qryres) {
     orm.post_info(post_id, function (res) {
       qryres(res);
     });
+  },
+  comments: function (post_id, qryres) {
+    orm.comment_info(post_id, function(res){
+      qryres(res);
+    })
   }
 };
 
