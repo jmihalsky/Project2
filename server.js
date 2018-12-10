@@ -19,7 +19,7 @@ var routes = require("./routes/slist_routes.js");
 
 app.use(routes);
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log("Listening on port: http://localhost:" + PORT);
 });
 
@@ -49,11 +49,11 @@ passport.use(
       passReqToCallback: true,
       usernameField: "username"
     },
-    function(req, username, password, done) {
+    function (req, username, password, done) {
       console.log("called local");
       pg.connect(
         connectionString,
-        function(err, client) {
+        function (err, client) {
           console.log("called local - pg");
 
           var user = {};
@@ -62,7 +62,7 @@ passport.use(
             username
           ]);
 
-          query.on("row", function(row) {
+          query.on("row", function (row) {
             console.log("User obj", row);
             console.log("Password", password);
             user = row;
@@ -77,7 +77,7 @@ passport.use(
           });
 
           // After all data is returned, close connection and return results
-          query.on("end", function() {
+          query.on("end", function () {
             client.end();
           });
 
@@ -91,27 +91,27 @@ passport.use(
   )
 );
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function (id, done) {
   console.log("called deserializeUser");
   pg.connect(
     connection,
-    function(err, client) {
+    function (err, client) {
       var user = {};
       console.log("called deserializeUser - pg");
       var query = client.query("SELECT * FROM users WHERE id = $1", [id]);
 
-      query.on("row", function(row) {
+      query.on("row", function (row) {
         console.log("User row", row);
         user = row;
         done(null, user);
       });
 
       // After all data is returned, close connection and return results
-      query.on("end", function() {
+      query.on("end", function () {
         client.end();
       });
 

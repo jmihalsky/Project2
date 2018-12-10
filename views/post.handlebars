@@ -1,16 +1,82 @@
-<div>
-    <h1>{{LocationName}}</h1>
-    <p>Current Rating: {{PostRating}}</p>
-    <br>
-    <h3> {{LocAddr}} {{City}}, {{State}} {{Zip}}</h3>
-    <br>
-    <div>
-        <img src="{{post_image}}" width="600px" height="auto">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{LocationName}}</h1>
+            <p class="starability-result" data-rating={{PostRating}}></p>
+            <br>
+            <h3> {{LocAddr}} {{City}}, {{State}} {{Zip}}</h3>
+            <br>
+            <div>
+                <img src="{{post_image}}" width="600px" height="auto">
+            </div>
+            <br>
+            <h4>{{PostText}}</h4>
+        </div>
     </div>
-    <br>
-    <h3>{{PostText}}</h3>
-</div>
-<br>
-<div>
-    COMMENTS
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Reviews</h2>
+
+            <!-- Pass in data from server.js -->
+            <ul>
+                {{#each scomments}}
+                <li>
+                    <p><span class="label">User:</span> {{this.UserId}}</p>
+                    <p class="starability-result" data-rating={{this.CommentRating}}></p>
+                    <p><span class="label">Review:</span> {{this.CommentText}}</p>
+
+                    <button data-id="{{this.PostID}}" class="delcomment">Delete</button>
+
+                    <a href="/{{this.PostID}}">Update this Review</a>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Add a Review</h4>
+            <form class="create-form">
+
+                <div class="form-group">
+                    <fieldset class="starability-basic">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked
+                            aria-label="No rating." />
+
+                        <input type="radio" id="rate1" name="rating" value="1" />
+                        <label for="rate1">1 star.</label>
+
+                        <input type="radio" id="rate2" name="rating" value="2" />
+                        <label for="rate2">2 stars.</label>
+
+                        <input type="radio" id="rate3" name="rating" value="3" />
+                        <label for="rate3">3 stars.</label>
+
+                        <input type="radio" id="rate4" name="rating" value="4" />
+                        <label for="rate4">4 stars.</label>
+
+                        <input type="radio" id="rate5" name="rating" value="5" />
+                        <label for="rate5">5 stars.</label>
+
+                        <input id="ratings" type="hidden" name="ratings" value="" />
+
+                        <span class="starability-focus-ring"></span>
+                    </fieldset>
+
+                    <form action="/action_page.php">
+                        <input type="file" name="pic" accept="image/*">
+                    </form>
+                </div>
+
+                <div class="form-group">
+                    <label for="com">Review:</label>
+                    <textarea class="form-control" id="com" name="comment" rows="8" cols="40"></textarea>
+                </div>
+
+                <button type="submit">Add Review</button>
+            </form>
+        </div>
+    </div>
 </div>

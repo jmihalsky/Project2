@@ -10,7 +10,6 @@ router.get("/", function (req, res) {
     var slistposts = {
       sposts: sposts
     };
-    console.log(slistposts);
     res.render("index", slistposts);
   });
 });
