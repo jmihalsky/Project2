@@ -3,7 +3,6 @@ var router = express.Router();
 var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
-var app = express();
 
 
 //homepage
