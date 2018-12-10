@@ -10,7 +10,6 @@ router.get("/", function (req, res) {
     var slistposts = {
       sposts: sposts
     };
-    console.log(slistposts);
     res.render("index", slistposts);
   });
 });
@@ -36,6 +35,7 @@ router.get("/city_search/:city", function (req, res) {
     res.render("search", slistposts);
   });
 });
+
 router.get("/zip_search/:zip", function (req, res) {
   slist.zip(req.param.zip, function (sposts) {
     var slistposts = {
