@@ -14,13 +14,14 @@ router.get("/", function (req, res) {
   });
 });
 
+
 //post pages
 router.get("/post/:id", function (req, res) {
   slist.posts(req.params.id, function (sposts) {
     console.log(sposts);
-    slist.comments(req.params.id, function(scoms){
+    slist.comments(req.params.id, function (scoms) {
       console.log(scoms);
-      res.render("post", {sposts: sposts, scoms: scoms});
+      res.render("post", { sposts: sposts, scoms: scoms });
     });
   });
 });
@@ -49,6 +50,9 @@ router.get("/zip_search/:zip", function (req, res) {
     res.render("search", slistposts);
   });
 });
+
+
+
 ///look at stuff below!
 // User Login Route
 router.get("/", function (req, res, next) {
