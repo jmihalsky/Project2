@@ -63,31 +63,38 @@ function checkSearch(zipState, cityState, searchParam) {
   }
 };
 
+//delete Comment on post.handlebars page
+$(".delcomment").on("click", function (event) {
+  event.preventDefault();
 
-$(".delcomment").on("click", function(event) {
   var id = $(this).val();
   console.log("deleting");
-  // Send the DELETE request.
+  // Send the DELETE request
   $.ajax("/api/comments/" + id, {
     type: "DELETE"
-  }).then(function(response){
-    console.log("maybe do something");
-  });
+  }).then(
+    function () {
+      console.log("Finished");
+      // Reload the page 
+    }
+  );
 });
 
-$("input[name=rating]").on("click", function() {
+
+$("input[name=rating]").on("click", function () {
   console.log("click");
   $("#ratings").val($(this).attr("value"));
 });
 
-
-$("#add-comm").submit(function(event){
+$("#add-comm").submit(function (event) {
   event.preventDefault();
   console.log("button working");
 });
 
 
-$(".update-form").on("submit", function(event) {
+
+//UPDATE Comment Form
+$(".update-form").on("submit", function (event) {
   // Make sure to preventDefault on a submit event.
   event.preventDefault();
 
@@ -106,7 +113,7 @@ $(".update-form").on("submit", function(event) {
   $.ajax("/api/comments/" + id, {
     type: "PUT",
     data: updatedComment
-  }).then(function() {
+  }).then(function () {
     console.log("updated comment");
     // Reload the page to get the updated list
     location.assign("/");
@@ -115,7 +122,6 @@ $(".update-form").on("submit", function(event) {
 
 
 //add button (photo upload sent through /upload api call seperately)
-
 $("#add").submit(function (event) {
   event.preventDefault();
   //determines rating

@@ -28,19 +28,26 @@ router.get("/post/:id", function (req, res) {
 });
 
 // comment - delete route
-router.delete("/api/comments/:id",function(req,res){
+router.delete("/api/comments/:id", function (req, res) {
   console.log("deleting comment " + req.params.id);
-  slist.dlt_comments(req.params.id, function(result){
+  slist.dlt_comments(req.params.id, function (result) {
     console.log(result);
-    res.result;
+    //refreshes page...
+    slist.posts(req.params.id, function (sposts) {
+      console.log(sposts);
+      slist.comments(req.params.id, function (scoms) {
+        console.log(scoms);
+        res.render("post", { sposts: sposts, scoms: scoms });
+      });
+    });
   });
 });
 
 // comment - post route
-router.post("/api/comments/", function(req,res){
+router.post("/api/comments/", function (req, res) {
   console.log([req.body.PostID, 1, req.body.CommentText, req.body.CommentText]);
-  slist.crt_comment([req.body.PostID, 1, req.body.CommentText, req.body.CommentText],function(result){
-    res.json({success: true});
+  slist.crt_comment([req.body.PostID, 1, req.body.CommentText, req.body.CommentText], function (result) {
+    res.json({ success: true });
   })
 });
 
