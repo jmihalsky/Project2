@@ -5,117 +5,112 @@
 
         <h2> Add A Location </h2>
         <form class="form-inline" method="post" action="/upload" enctype="multipart/form-data" id="add">
-          <div class="row">
-            <div class="form-group row">
-              <label for="inputLocation">
-                <p>Name of Location</p>
-              </label>
-              <input class="form-control" id="inputLocation" type="text">
 
-            </div>
+          <div class="form-group row">
+            <label for="inputLocation">
+              <p>Name of Location</p>
+            </label>
+            <input class="form-control" id="inputLocation" type="text">
+
           </div>
-          <div class="row">
-            <div class="form-group row">
-              <label for="inputAddress">
-                <p>Street Address</p>
-              </label>
-              <input type="text" class="form-control" id="inputAddress">
-            </div>
+
+          <div class="form-group row">
+            <label for="inputAddress">
+              <p>Street Address</p>
+            </label>
+            <input type="text" class="form-control" id="inputAddress">
           </div>
-          <div class="row">
-            <div class="form-group row">
-              <label for="inputCity">
-                <p>City</p>
-              </label>
-              <input type="text" class="form-control" id="inputCity">
-              <label for="inputState">
-                <p>State</p>
-              </label>
-              <select id="inputState" class="form-control">
-                <option selected>CA</option>
-                <option>AL</option>
-                <option>AK</option>
-                <option>AZ</option>
-                <option>AR</option>
-                <option>CO</option>
-                <option>CT</option>
-                <option>DE</option>
-                <option>FL</option>
-                <option>GA</option>
-                <option>HI</option>
-                <option>ID</option>
-                <option>IL</option>
-                <option>IN</option>
-                <option>IA</option>
-                <option>KS</option>
-                <option>KY</option>
-                <option>LA</option>
-                <option>ME</option>
-                <option>MD</option>
-                <option>MA</option>
-                <option>MI</option>
-                <option>MN</option>
-                <option>MS</option>
-                <option>MO</option>
-                <option>MT</option>
-                <option>NE</option>
-                <option>NV</option>
-                <option>NH</option>
-                <option>NJ</option>
-                <option>NM</option>
-                <option>NY</option>
-                <option>NC</option>
-                <option>ND</option>
-                <option>OH</option>
-                <option>OK</option>
-                <option>OR</option>
-                <option>PA</option>
-                <option>RI</option>
-                <option>SC</option>
-                <option>SD</option>
-                <option>TN</option>
-                <option>TX</option>
-                <option>UT</option>
-                <option>VT</option>
-                <option>VA</option>
-                <option>WA</option>
-                <option>WV</option>
-                <option>WI</option>
-                <option>WY</option>
-              </select>
-              <label for="inputZip">
-                <p>Zip Code</p>
-              </label>
-              <input type="text" class="form-control" id="inputZip">
-            </div>
+
+          <div class="form-group row">
+            <label for="inputCity">
+              <p>City</p>
+            </label>
+            <input type="text" class="form-control" id="inputCity">
+            <label for="inputState">
+              <p>State</p>
+            </label>
+            <select id="inputState" class="form-control">
+              <option selected>CA</option>
+              <option>AL</option>
+              <option>AK</option>
+              <option>AZ</option>
+              <option>AR</option>
+              <option>CO</option>
+              <option>CT</option>
+              <option>DE</option>
+              <option>FL</option>
+              <option>GA</option>
+              <option>HI</option>
+              <option>ID</option>
+              <option>IL</option>
+              <option>IN</option>
+              <option>IA</option>
+              <option>KS</option>
+              <option>KY</option>
+              <option>LA</option>
+              <option>ME</option>
+              <option>MD</option>
+              <option>MA</option>
+              <option>MI</option>
+              <option>MN</option>
+              <option>MS</option>
+              <option>MO</option>
+              <option>MT</option>
+              <option>NE</option>
+              <option>NV</option>
+              <option>NH</option>
+              <option>NJ</option>
+              <option>NM</option>
+              <option>NY</option>
+              <option>NC</option>
+              <option>ND</option>
+              <option>OH</option>
+              <option>OK</option>
+              <option>OR</option>
+              <option>PA</option>
+              <option>RI</option>
+              <option>SC</option>
+              <option>SD</option>
+              <option>TN</option>
+              <option>TX</option>
+              <option>UT</option>
+              <option>VT</option>
+              <option>VA</option>
+              <option>WA</option>
+              <option>WV</option>
+              <option>WI</option>
+              <option>WY</option>
+            </select>
+            <label for="inputZip">
+              <p>Zip Code</p>
+            </label>
+            <input type="text" class="form-control" id="inputZip">
           </div>
-          <div class="row">
-            <div class="form-group row">
-              <label for="inputDescription">
-                <p>Description</p>
-              </label>
-              <textarea class="form-control" id="inputDescription" rows="3"></textarea>
-            </div>
+
+          <div class="form-group row">
+            <label for="inputDescription">
+              <p>Description</p>
+            </label>
+            <textarea class="form-control" id="inputDescription" rows="3"></textarea>
           </div>
-          <div class="row">
-            <p> Rating: </p>
-            <div class="form-group row">
-              <fieldset class="starability-basic">
-                <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
-                <input type="radio" id="rate1" name="rating" value="1" />
-                <label for="rate1">1 star.</label>
-                <input type="radio" id="rate2" name="rating" value="2" />
-                <label for="rate2">2 stars.</label>
-                <input type="radio" id="rate3" name="rating" value="3" />
-                <label for="rate3">3 stars.</label>
-                <input type="radio" id="rate4" name="rating" value="4" />
-                <label for="rate4">4 stars.</label>
-                <input type="radio" id="rate5" name="rating" value="5" />
-                <label for="rate5">5 stars.</label>
-                <input id="ratings" type="hidden" name="ratings" value="" />
-                <span class="starability-focus-ring"></span>
-              </fieldset>
-            </div>
+
+          <p> Rating: </p>
+          <div class="form-group row">
+            <fieldset class="starability-basic">
+              <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+              <input type="radio" id="rate1" name="rating" value="1" />
+              <label for="rate1">1 star.</label>
+              <input type="radio" id="rate2" name="rating" value="2" />
+              <label for="rate2">2 stars.</label>
+              <input type="radio" id="rate3" name="rating" value="3" />
+              <label for="rate3">3 stars.</label>
+              <input type="radio" id="rate4" name="rating" value="4" />
+              <label for="rate4">4 stars.</label>
+              <input type="radio" id="rate5" name="rating" value="5" />
+              <label for="rate5">5 stars.</label>
+              <input id="ratings" type="hidden" name="ratings" value="" />
+              <span class="starability-focus-ring"></span>
+            </fieldset>
           </div>
           <div class="form-group row">
             <label for="inputPhoto">
@@ -131,7 +126,8 @@
         </form>
       </div>
       <div class="col-8">
-        {{!-- MAP INFO HERE --}}
+        <div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
+        <div id="map" style="width: 100%; height: 90%"></div>
       </div>
     </div>
   </div>
