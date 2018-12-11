@@ -72,3 +72,7 @@ img {
 #add {
   display: inline;
 }
+
+#map {
+  height: 100%;
+}
