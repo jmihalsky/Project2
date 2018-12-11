@@ -80,15 +80,48 @@ $(".delcomment").on("click", function (event) {
   );
 });
 
-
-$("input[name=rating]").on("click", function () {
-  console.log("click");
-  $("#ratings").val($(this).attr("value"));
-});
-
+//add button for New Comment (photo upload sent through /uploadcomment api call seperately)
 $("#add-comm").submit(function (event) {
   event.preventDefault();
-  console.log("button working");
+  //determines rating
+  var postID = Number($(this).attr("name"));
+  var rating = 0;
+  if ($("#rate1").is(":checked")) {
+    rating = 1;
+  };
+  if ($("#rate2").is(":checked")) {
+    rating = 2;
+  };
+  if ($("#rate3").is(":checked")) {
+    rating = 3;
+  };
+  if ($("#rate4").is(":checked")) {
+    rating = 4;
+  };
+  if ($("#rate5").is(":checked")) {
+    rating = 5;
+  };
+
+  //set up object ///need to change user id for future!
+  var newComment = {
+    PostID: postID,
+    UserID: 1,
+    CommentText: $("#com").val().trim(),
+    CommentRating: rating,
+    comment_image: "/assets/img/comment_img/" + document.getElementById("inputCommentPhoto").files[0].name
+  };
+
+  //Send the POST request.
+  $.ajax("/api/comments/" + postID, {
+    type: "POST",
+    data: newComment
+  }).then(
+    function () {
+      console.log("posted new comment");
+      // Reload the page 
+      location.reload();
+    }
+  );
 });
 
 

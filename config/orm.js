@@ -42,31 +42,36 @@ var orm = {
 
     });
   },
-  comment_dlt: function(comment_id,qryres){
+  comment_dlt: function (comment_id, qryres) {
     var qrystrg = "delete from Comments where CommentID = " + comment_id;
-    connection.query(qrystrg, function(err,res){
-      if(err)
-      {
-        res.json = ({success: false});
+    connection.query(qrystrg, function (err, res) {
+      if (err) {
+        res.json = ({ success: false });
         qryres(res);
       }
-      else
-      {
+      else {
         console.log("Deleted");
-        res.json = ({success: true});
+        res.json = ({ success: true });
         qryres(res);
       }
     });
   },
-  comment_crt: function(vals,qryres){
-    var qrystrg = "insert into Comments (PostID,UserID,CommentText,CommentRating) values( ?,?,?,?)";
-    connection.query(qrystrg,vals, function(err,res){
-      if(err)
-      {
-        throw err;
-      }
+  create_comment: function (table, col, val, qryres) {
+    var qrystring = "INSERT INTO " + table;
+    qrystring += " (";
+    qrystring += col.toString();
+    qrystring += ") ";
+    qrystring += "VALUES (";
+    qrystring += val
+    qrystring += ") ";
 
-    })
+    console.log(qrystring);
+
+    connection.query(qrystring, function (err, res) {
+      if (err) throw err;
+
+      qryres(res);
+    });
   },
 
   create_location: function (table, col, val, qryres) {

@@ -43,10 +43,12 @@
 
     <div class="row">
         <div class="col-md-12">
+            {{#each sposts}}
             <h4>Add a Review</h4>
-            <form class="create-form" id="add-comm">
+            <form class="create-form" method="post" action="uploadcomment" enctype="multipart/form-data" id="add-comm"
+                name="{{this.PostID}}">
 
-                <div class="form-group">
+                <div class=" form-group">
                     <fieldset class="starability-basic">
                         <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked
                             aria-label="No rating." />
@@ -70,10 +72,12 @@
 
                         <span class="starability-focus-ring"></span>
                     </fieldset>
-
-                    <form action="/action_page.php">
-                        <input type="file" name="pic" accept="image/*">
-                    </form>
+                </div>
+                <div class="form-group row">
+                    <label for="inputPhoto">
+                        <p>Upload a Photo</p>
+                    </label>
+                    <input type="file" class="form-control-file" name="commentPhoto" id="inputCommentPhoto">
                 </div>
 
                 <div class="form-group">
@@ -83,6 +87,7 @@
 
                 <button type="submit">Add Review</button>
             </form>
+            {{/each}}
         </div>
     </div>
 </div>
