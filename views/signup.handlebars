@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-6 formBack">
             <h1>Sign Up</h1>
             <form>
                 <div class="form-group">
@@ -16,10 +16,10 @@
                     <input type="password" class="form-control form-control-lg">
                 </div>
                 <div class="form-group">
-                    <form action="/action_page.php">
-                        <label>Avatar</label>
-                        <input type="file" name="pic" accept="image/*">
-                    </form>
+                    <label for="inputPhoto">
+                        <p>Avatar</p>
+                    </label>
+                    <input type="file" class="form-control-file" name="locationPhoto" id="inputPhoto">
                 </div>
                 <button type="submit" class="btn btn-dark btn-lg btn-block">Submit</button>
             </form>
