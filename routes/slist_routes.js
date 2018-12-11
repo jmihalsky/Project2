@@ -58,8 +58,7 @@ router.post("/uploadcomment", function (req, res) {
 
   photo = req.files.commentPhoto;
 
-  uploadPath = __dirname + "/assets/img/comment_img/" + photo.name;
-
+  uploadPath = "/assets/img/comment_img/" + photo.name;
   photo.mv(uploadPath, function (err) {
     if (err) {
       return res.status(500).send(err);
@@ -134,7 +133,7 @@ router.post("/upload", function (req, res) {
 
   photo = req.files.locationPhoto;
 
-  uploadPath = __dirname + "/assets/img/post_img/" + photo.name;
+  uploadPath = "/assets/img/post_img/" + photo.name;
 
   photo.mv(uploadPath, function (err) {
     if (err) {
