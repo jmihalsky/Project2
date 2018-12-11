@@ -58,8 +58,6 @@ var orm = {
     qrystring += val
     qrystring += ") ";
 
-    console.log(qrystring);
-
     connection.query(qrystring, function (err, res) {
       if (err) throw err;
 
@@ -76,8 +74,6 @@ var orm = {
     qrystring += "VALUES (";
     qrystring += val
     qrystring += ") ";
-
-    console.log(qrystring);
 
     connection.query(qrystring, function (err, res) {
       if (err) throw err;

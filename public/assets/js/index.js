@@ -1,5 +1,5 @@
 //LEARN MORE BUTTON
-$(".button-learn").on("click", function(event) {
+$(".button-learn").on("click", function (event) {
   event.preventDefault();
   var id = $(this).val();
   var url = "/post/" + id;
@@ -7,19 +7,19 @@ $(".button-learn").on("click", function(event) {
 });
 
 //LOGIN BUTTON
-$(".login").on("click", function(event) {
+$(".login").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
 });
 
 //SIGNUP BUTTON
-$(".signup").on("click", function(event) {
+$(".signup").on("click", function (event) {
   event.preventDefault();
   window.location = "/signup";
 });
 
 //SEARCH BUTTON
-$("#search").submit(function(event) {
+$("#search").submit(function (event) {
   event.preventDefault();
   var zipState = false;
   var cityState = false;
@@ -65,13 +65,13 @@ function checkSearch(zipState, cityState, searchParam) {
 }
 
 //DELETE COMMENT
-$(".delete-com").on("click", function(event) {
+$(".delete-com").on("click", function (event) {
   var id = $(this).data("id");
   console.log("deleting");
 
   $.ajax("/api/comments/" + id, {
     type: "DELETE"
-  }).then(function() {
+  }).then(function () {
     console.log("deleted comment = ", id);
     // Reload the page to get the updated list
     location.reload();
@@ -79,7 +79,7 @@ $(".delete-com").on("click", function(event) {
 });
 
 //ADD REVIEW (photo upload sent through /uploadcomment api call seperately)
-$("#add-comm").submit(function(event) {
+$("#add-comm").submit(function (event) {
   event.preventDefault();
 
   var postID = Number($(this).attr("name"));
@@ -101,31 +101,55 @@ $("#add-comm").submit(function(event) {
     rating = 5;
   }
 
+  var photo;
+
+  if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
+    photo = "";
+  } else {
+    photo = "/assets/img/comment_img/" + document.getElementById("inputCommentPhoto").files[0].name;
+  };
+
   //set up object ///need to change user id for future!
   var newComment = {
     PostID: postID,
     UserID: 1,
-    CommentText: $("#com")
-      .val()
-      .trim(),
+    CommentText: $("#com").val().trim(),
     CommentRating: rating,
-    comment_image:
-      "/assets/img/comment_img/" +
-      document.getElementById("inputCommentPhoto").files[0].name
+    comment_image: photo
   };
 
-  $.ajax("/api/comments/" + postID, {
-    type: "POST",
-    data: newComment
-  }).then(function() {
-    console.log("posted new comment");
-    // Reload the page
-    location.reload();
-  });
+  validateFormComment(newComment)
+
 });
 
+function validateFormComment(newComment) {
+  var a = newComment.PostID;
+  var b = newComment.UserID;
+  var c = newComment.CommentText;
+  var d = newComment.CommentRating;
+  var e = newComment.comment_image;
+
+
+  if ((a == "") || (b == "") || (c == "") || (d == "") || (e == "")) {
+    alert("Please fill out the whole form!");
+  } else {
+    //Send the POST request.
+    $.ajax("/api/comments/" + newComment.PostID, {
+      type: "POST",
+      data: newComment
+    }).then(function () {
+      console.log("posted new comment");
+      // Reload the page
+      location.reload();
+    });
+  }
+};
+
+
+
+
 //UPDATE Comment Form
-$(".update-form").on("submit", function(event) {
+$(".update-form").on("submit", function (event) {
   // Make sure to preventDefault on a submit event.
   event.preventDefault();
 
@@ -144,7 +168,7 @@ $(".update-form").on("submit", function(event) {
   $.ajax("/api/comments/" + id, {
     type: "PUT",
     data: updatedComment
-  }).then(function() {
+  }).then(function () {
     console.log("updated comment");
     // Reload the page to get the updated list
     location.assign("/");
@@ -152,7 +176,7 @@ $(".update-form").on("submit", function(event) {
 });
 
 //ADD POST (photo upload sent through /upload api call seperately)
-$("#add").submit(function(event) {
+$("#add").submit(function (event) {
   event.preventDefault();
   //determines rating
   var rating = 0;
@@ -173,46 +197,59 @@ $("#add").submit(function(event) {
   }
 
   var zipNum = Number(
-    $("#inputZip")
-      .val()
-      .trim()
+    $("#inputZip").val().trim()
   );
+
+  var photo;
+
+  if (document.getElementById("inputPhoto").files[0] == undefined) {
+    photo = "";
+  } else {
+    photo = "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name;
+  };
+
 
   //set up object ///need to change user id for future!
   var newLocation = {
     UserID: 1,
-    LocationName: $("#inputLocation")
-      .val()
-      .trim(),
-    LocAddr: $("#inputAddress")
-      .val()
-      .trim(),
-    City: $("#inputCity")
-      .val()
-      .trim(),
-    State: $("#inputState")
-      .val()
-      .trim(),
+    LocationName: $("#inputLocation").val().trim(),
+    LocAddr: $("#inputAddress").val().trim(),
+    City: $("#inputCity").val().trim(),
+    State: $("#inputState").val().trim(),
     Zip: zipNum,
-    PostText: $("#inputDescription")
-      .val()
-      .trim(),
+    PostText: $("#inputDescription").val().trim(),
     PostRating: rating,
-    post_image:
-      "/assets/img/post_img/" +
-      document.getElementById("inputPhoto").files[0].name
+    post_image: photo
   };
 
-  // Send the POST request.
-  $.ajax("/newlocation", {
-    type: "POST",
-    data: newLocation
-  }).then(function() {
-    console.log("posted new location");
-    // Reload the page
-    location.reload();
-  });
+  validateForm(newLocation)
 });
+
+function validateForm(newLocation) {
+  var a = newLocation.UserId;
+  var b = newLocation.LocationName;
+  var c = newLocation.LocAddr;
+  var d = newLocation.City;
+  var e = newLocation.State;
+  var f = newLocation.Zip;
+  var g = newLocation.PostText;
+  var h = newLocation.PostRating;
+  var i = newLocation.post_image;
+
+  if ((a == "") || (b == "") || (c == "") || (d == "") || (e == "") || (f == "") || (g == "") || (h == "") || (i == "")) {
+    alert("Please fill out the whole form!");
+  } else {
+    //Send the POST request.
+    $.ajax("/newlocation", {
+      type: "POST",
+      data: newLocation
+    }).then(function () {
+      console.log("posted new location");
+      // Reload the page
+      location.reload();
+    });
+  }
+};
 
 // MAP SCRIPT
 var map;
@@ -237,7 +274,7 @@ function initMap() {
   ).onclick = searchLocations;
 
   locationSelect = document.getElementById("locationSelect");
-  locationSelect.onchange = function() {
+  locationSelect.onchange = function () {
     var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
     if (markerNum != "none") {
       google.maps.event.trigger(markers[markerNum], "click");
@@ -248,7 +285,7 @@ function initMap() {
 function searchLocations() {
   var address = document.getElementById("addressInput").value;
   var geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ address: address }, function(results, status) {
+  geocoder.geocode({ address: address }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       searchLocationsNear(results[0].geometry.location);
     } else {
@@ -282,7 +319,7 @@ function searchLocationsNear(center) {
     center.lng() +
     "&radius=" +
     radius;
-  downloadUrl(searchUrl, function(data) {
+  downloadUrl(searchUrl, function (data) {
     var xml = parseXml(data);
     var markerNodes = xml.documentElement.getElementsByTagName("marker");
     var bounds = new google.maps.LatLngBounds();
@@ -302,7 +339,7 @@ function searchLocationsNear(center) {
     }
     map.fitBounds(bounds);
     locationSelect.style.visibility = "visible";
-    locationSelect.onchange = function() {
+    locationSelect.onchange = function () {
       var markerNum =
         locationSelect.options[locationSelect.selectedIndex].value;
       google.maps.event.trigger(markers[markerNum], "click");
@@ -316,7 +353,7 @@ function createMarker(latlng, name, address) {
     map: map,
     position: latlng
   });
-  google.maps.event.addListener(marker, "click", function() {
+  google.maps.event.addListener(marker, "click", function () {
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
   });
@@ -335,7 +372,7 @@ function downloadUrl(url, callback) {
     ? new ActiveXObject("Microsoft.XMLHTTP")
     : new XMLHttpRequest();
 
-  request.onreadystatechange = function() {
+  request.onreadystatechange = function () {
     if (request.readyState == 4) {
       request.onreadystatechange = doNothing;
       callback(request.responseText, request.status);
@@ -356,4 +393,4 @@ function parseXml(str) {
   }
 }
 
-function doNothing() {}
+function doNothing() { }
