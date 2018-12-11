@@ -4,10 +4,9 @@ var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
 
-
 //homepage
-router.get("/", function (req, res) {
-  slist.all(function (sposts) {
+router.get("/", function(req, res) {
+  slist.all(function(sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -15,12 +14,11 @@ router.get("/", function (req, res) {
   });
 });
 
-
 //post pages
-router.get("/post/:id", function (req, res) {
-  slist.posts(req.params.id, function (sposts) {
+router.get("/post/:id", function(req, res) {
+  slist.posts(req.params.id, function(sposts) {
     console.log(sposts);
-    slist.comments(req.params.id, function (scoms) {
+    slist.comments(req.params.id, function(scoms) {
       console.log(scoms);
       res.render("post", { sposts: sposts, scoms: scoms });
     });
@@ -28,30 +26,38 @@ router.get("/post/:id", function (req, res) {
 });
 
 // comment - delete route
-router.delete("/api/comments/:id",function(req,res){
+router.delete("/api/comments/:id", function(req, res) {
   console.log("deleting comment " + req.params.id);
-  slist.dlt_comments(req.params.id, function(result){
+  slist.dlt_comments(req.params.id, function(result) {
     console.log(result);
     res.result;
   });
 });
 
 // comment - post route
-router.post("/api/comments/", function(req,res){
+router.post("/api/comments/", function(req, res) {
   console.log([req.body.PostID, 1, req.body.CommentText, req.body.CommentText]);
-  slist.crt_comment([req.body.PostID, 1, req.body.CommentText, req.body.CommentText],function(result){
-    res.json({success: true});
-  })
+  slist.crt_comment(
+    [req.body.PostID, 1, req.body.CommentText, req.body.CommentText],
+    function(result) {
+      res.json({ success: true });
+    }
+  );
 });
 
 //login page
-router.get("/login", function (req, res) {
+router.get("/login", function(req, res) {
   res.render("login");
 });
 
+//signup page
+router.get("/signup", function(req, res) {
+  res.render("signup");
+});
+
 //search page
-router.get("/city_search/:city", function (req, res) {
-  slist.city(req.params.city, function (sposts) {
+router.get("/city_search/:city", function(req, res) {
+  slist.city(req.params.city, function(sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -59,18 +65,17 @@ router.get("/city_search/:city", function (req, res) {
   });
 });
 
-router.get("/zip_search/:zip", function (req, res) {
-  slist.zip(req.params.zip, function (sposts) {
+router.get("/zip_search/:zip", function(req, res) {
+  slist.zip(req.params.zip, function(sposts) {
     var slistposts = {
       sposts: sposts
     };
     res.render("search", slistposts);
   });
 });
-
 
 //Uploading "new post images!"
-router.post("/upload", function (req, res) {
+router.post("/upload", function(req, res) {
   var photo;
   var uploadPath;
 
@@ -84,7 +89,7 @@ router.post("/upload", function (req, res) {
 
   uploadPath = __dirname + "/assets/img/post_img/" + photo.name;
 
-  photo.mv(uploadPath, function (err) {
+  photo.mv(uploadPath, function(err) {
     if (err) {
       return res.status(500).send(err);
     }
@@ -92,25 +97,43 @@ router.post("/upload", function (req, res) {
   });
 });
 
-
 //Sending new Location to MySQL
-router.post("/newlocation", function (req, res) {
-  slist.createLocation([
-    "UserID", "LocationName", "LocAddr", "City", "State", "Zip", "PostText", "PostRating", "post_image"
-  ], [
-      req.body.UserID, `"` + req.body.LocationName + `"`, `"` + req.body.LocAddr + `"`, `"` + req.body.City + `"`, `"` + req.body.State + `"`, req.body.Zip, `"` + req.body.PostText + `"`, req.body.PostRating, `"` + req.body.post_image + `"`
-    ], function (sposts) {
+router.post("/newlocation", function(req, res) {
+  slist.createLocation(
+    [
+      "UserID",
+      "LocationName",
+      "LocAddr",
+      "City",
+      "State",
+      "Zip",
+      "PostText",
+      "PostRating",
+      "post_image"
+    ],
+    [
+      req.body.UserID,
+      `"` + req.body.LocationName + `"`,
+      `"` + req.body.LocAddr + `"`,
+      `"` + req.body.City + `"`,
+      `"` + req.body.State + `"`,
+      req.body.Zip,
+      `"` + req.body.PostText + `"`,
+      req.body.PostRating,
+      `"` + req.body.post_image + `"`
+    ],
+    function(sposts) {
       var slistposts = {
         sposts: sposts
       };
       res.render("index", slistposts);
-    });
+    }
+  );
 });
-
 
 ///look at stuff below!
 // User Login Route
-router.get("/", function (req, res, next) {
+router.get("/", function(req, res, next) {
   res.sendFile(path.join(__dirname, "../views/login.handlebars"));
 });
 
@@ -123,24 +146,24 @@ router.post(
 );
 
 //  Register New User Route
-router.get("/", function (req, res, next) {
+router.get("/", function(req, res, next) {
   res.sendFile(path.resolve(__dirname, "../views/register.html"));
 });
 
-router.post("/", function (req, res, next) {
+router.post("/", function(req, res, next) {
   pg.connect(
     connectionString,
-    function (err, client) {
+    function(err, client) {
       var query = client.query(
         "INSERT INTO users (username, password) VALUES ($1, $2)",
         [request.body.username, request.body.password]
       );
 
-      query.on("error", function (err) {
+      query.on("error", function(err) {
         console.log(err);
       });
 
-      query.on("end", function () {
+      query.on("end", function() {
         response.sendStatus(200);
         client.end();
       });
@@ -149,7 +172,7 @@ router.post("/", function (req, res, next) {
 });
 
 //  User authenticated
-router.get("/", function (req, res, next) {
+router.get("/", function(req, res, next) {
   res.send(req.isAuthenticated());
 });
 
