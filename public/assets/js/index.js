@@ -134,7 +134,7 @@ function validateFormComment(newComment) {
     alert("Please fill out the whole form!");
   } else {
     //Send the POST request.
-    $.ajax("/api/comments/" + postID, {
+    $.ajax("/api/comments/" + newComment.PostID, {
       type: "POST",
       data: newComment
     }).then(function () {
