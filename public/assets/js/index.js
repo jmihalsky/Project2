@@ -175,7 +175,15 @@ $("#add").submit(function (event) {
   var zipNum = Number(
     $("#inputZip").val().trim()
   );
-  var photo = "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name;
+  var photo;
+
+  if (document.getElementById("inputPhoto").files[0] == undefined) {
+    photo = "";
+  } else {
+    photo = "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name;
+  };
+
+
   //set up object ///need to change user id for future!
   var newLocation = {
     UserID: 1,
@@ -207,7 +215,7 @@ function validateForm(newLocation) {
   if ((a == "") || (b == "") || (c == "") || (d == "") || (e == "") || (f == "") || (g == "") || (h == "") || (i == "")) {
     alert("Please fill out the whole form!");
   } else {
-    // Send the POST request.
+    //Send the POST request.
     $.ajax("/newlocation", {
       type: "POST",
       data: newLocation
