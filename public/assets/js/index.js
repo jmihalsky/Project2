@@ -101,28 +101,52 @@ $("#add-comm").submit(function (event) {
     rating = 5;
   }
 
+  var photo;
+
+  if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
+    photo = "";
+  } else {
+    photo = "/assets/img/comment_img/" + document.getElementById("inputCommentPhoto").files[0].name;
+  };
+
   //set up object ///need to change user id for future!
   var newComment = {
     PostID: postID,
     UserID: 1,
-    CommentText: $("#com")
-      .val()
-      .trim(),
+    CommentText: $("#com").val().trim(),
     CommentRating: rating,
-    comment_image:
-      "/assets/img/comment_img/" +
-      document.getElementById("inputCommentPhoto").files[0].name
+    comment_image: photo
   };
 
-  $.ajax("/api/comments/" + postID, {
-    type: "POST",
-    data: newComment
-  }).then(function () {
-    console.log("posted new comment");
-    // Reload the page
-    location.reload();
-  });
+  validateFormComment(newComment)
+
 });
+
+function validateFormComment(newComment) {
+  var a = newComment.PostID;
+  var b = newComment.UserID;
+  var c = newComment.CommentText;
+  var d = newComment.CommentRating;
+  var e = newComment.comment_image;
+
+
+  if ((a == "") || (b == "") || (c == "") || (d == "") || (e == "")) {
+    alert("Please fill out the whole form!");
+  } else {
+    //Send the POST request.
+    $.ajax("/api/comments/" + postID, {
+      type: "POST",
+      data: newComment
+    }).then(function () {
+      console.log("posted new comment");
+      // Reload the page
+      location.reload();
+    });
+  }
+};
+
+
+
 
 //UPDATE Comment Form
 $(".update-form").on("submit", function (event) {
@@ -175,6 +199,7 @@ $("#add").submit(function (event) {
   var zipNum = Number(
     $("#inputZip").val().trim()
   );
+
   var photo;
 
   if (document.getElementById("inputPhoto").files[0] == undefined) {
@@ -201,7 +226,6 @@ $("#add").submit(function (event) {
 });
 
 function validateForm(newLocation) {
-  console.log("validation info= " + JSON.stringify(newLocation));
   var a = newLocation.UserId;
   var b = newLocation.LocationName;
   var c = newLocation.LocAddr;
