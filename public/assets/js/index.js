@@ -12,6 +12,12 @@ $(".login").on("click", function (event) {
   window.location = "/login";
 });
 
+//VIEW ALL BUTTON
+$("#view-all").on("click", function (event) {
+  event.preventDefault();
+  window.location = "/all";
+})
+
 //SIGNUP BUTTON
 $(".signup").on("click", function (event) {
   event.preventDefault();

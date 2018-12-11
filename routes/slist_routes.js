@@ -5,20 +5,25 @@ var passport = require("passport");
 var path = require("path");
 
 //homepage
-router.get("/", function(req, res) {
-  slist.all(function(sposts) {
+router.get("/", function (req, res) {
+  res.render("index");
+});
+
+//view all search
+router.get("/all", function (req, res) {
+  slist.all(function (sposts) {
     var slistposts = {
       sposts: sposts
     };
-    res.render("index", slistposts);
+    res.render("search", slistposts);
   });
 });
 
 //post pages
-router.get("/post/:id", function(req, res) {
-  slist.posts(req.params.id, function(sposts) {
+router.get("/post/:id", function (req, res) {
+  slist.posts(req.params.id, function (sposts) {
     console.log(sposts);
-    slist.comments(req.params.id, function(scoms) {
+    slist.comments(req.params.id, function (scoms) {
       console.log(scoms);
       res.render("post", { sposts: sposts, scoms: scoms });
     });
@@ -68,8 +73,6 @@ router.post("/uploadcomment", function (req, res) {
 
 
 // comment - post route
-
-
 router.post("/api/comments/:id", function (req, res) {
   slist.createComment([
     "PostID", "UserID", "CommentText", "CommentRating", "comment_image"
@@ -91,18 +94,18 @@ router.post("/api/comments/:id", function (req, res) {
 
 
 //login page
-router.get("/login", function(req, res) {
+router.get("/login", function (req, res) {
   res.render("login");
 });
 
 //signup page
-router.get("/signup", function(req, res) {
+router.get("/signup", function (req, res) {
   res.render("signup");
 });
 
 //search page
-router.get("/city_search/:city", function(req, res) {
-  slist.city(req.params.city, function(sposts) {
+router.get("/city_search/:city", function (req, res) {
+  slist.city(req.params.city, function (sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -110,8 +113,8 @@ router.get("/city_search/:city", function(req, res) {
   });
 });
 
-router.get("/zip_search/:zip", function(req, res) {
-  slist.zip(req.params.zip, function(sposts) {
+router.get("/zip_search/:zip", function (req, res) {
+  slist.zip(req.params.zip, function (sposts) {
     var slistposts = {
       sposts: sposts
     };
@@ -120,7 +123,7 @@ router.get("/zip_search/:zip", function(req, res) {
 });
 
 //Uploading "new post images!"
-router.post("/upload", function(req, res) {
+router.post("/upload", function (req, res) {
   var photo;
   var uploadPath;
 
@@ -133,7 +136,7 @@ router.post("/upload", function(req, res) {
 
   uploadPath = __dirname + "/assets/img/post_img/" + photo.name;
 
-  photo.mv(uploadPath, function(err) {
+  photo.mv(uploadPath, function (err) {
     if (err) {
       return res.status(500).send(err);
     } else {
@@ -143,7 +146,7 @@ router.post("/upload", function(req, res) {
 });
 
 //Sending new Location to MySQL
-router.post("/newlocation", function(req, res) {
+router.post("/newlocation", function (req, res) {
   slist.createLocation(
     [
       "UserID",
@@ -167,7 +170,7 @@ router.post("/newlocation", function(req, res) {
       req.body.PostRating,
       `"` + req.body.post_image + `"`
     ],
-    function(sposts) {
+    function (sposts) {
       var slistposts = {
         sposts: sposts
       };
@@ -178,7 +181,7 @@ router.post("/newlocation", function(req, res) {
 
 ///look at stuff below!
 // User Login Route
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.sendFile(path.join(__dirname, "../views/login.handlebars"));
 });
 
@@ -191,24 +194,24 @@ router.post(
 );
 
 //  Register New User Route
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.sendFile(path.resolve(__dirname, "../views/register.html"));
 });
 
-router.post("/", function(req, res, next) {
+router.post("/", function (req, res, next) {
   pg.connect(
     connectionString,
-    function(err, client) {
+    function (err, client) {
       var query = client.query(
         "INSERT INTO users (username, password) VALUES ($1, $2)",
         [request.body.username, request.body.password]
       );
 
-      query.on("error", function(err) {
+      query.on("error", function (err) {
         console.log(err);
       });
 
-      query.on("end", function() {
+      query.on("end", function () {
         response.sendStatus(200);
         client.end();
       });
@@ -217,7 +220,7 @@ router.post("/", function(req, res, next) {
 });
 
 //  User authenticated
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   res.send(req.isAuthenticated());
 });
 
