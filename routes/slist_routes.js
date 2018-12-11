@@ -28,21 +28,67 @@ router.get("/post/:id", function (req, res) {
 });
 
 // comment - delete route
-router.delete("/api/comments/:id",function(req,res){
+router.delete("/api/comments/:id", function (req, res) {
   console.log("deleting comment " + req.params.id);
-  slist.dlt_comments(req.params.id, function(result){
+  slist.dlt_comments(req.params.id, function (result) {
     console.log(result);
-    res.result;
+    //refreshes page...
+    slist.posts(req.params.id, function (sposts) {
+      console.log(sposts);
+      slist.comments(req.params.id, function (scoms) {
+        console.log(scoms);
+        res.render("post", { sposts: sposts, scoms: scoms });
+      });
+    });
   });
 });
 
-// comment - post route
-router.post("/api/comments/", function(req,res){
-  console.log([req.body.PostID, 1, req.body.CommentText, req.body.CommentText]);
-  slist.crt_comment([req.body.PostID, 1, req.body.CommentText, req.body.CommentText],function(result){
-    res.json({success: true});
-  })
+
+//Uploading new comment images
+router.post("/uploadcomment", function (req, res) {
+  var photo;
+  var uploadPath;
+
+  if (Object.keys(req.files).length == 0) {
+    res.status(400).send("No files were uploaded.");
+    return;
+  }
+
+  photo = req.files.commentPhoto;
+
+  uploadPath = __dirname + "/assets/img/comment_img/" + photo.name;
+
+  photo.mv(uploadPath, function (err) {
+    if (err) {
+      return res.status(500).send(err);
+    } else {
+      console.log("File uploaded to " + uploadPath);
+    };
+  });
 });
+
+
+
+
+// comment - post route
+router.post("/api/comments/:id", function (req, res) {
+  slist.createComment([
+    "PostID", "UserID", "CommentText", "CommentRating", "comment_image"
+  ], [
+      req.body.PostID, req.body.UserID, `"` + req.body.CommentText + `"`, req.body.CommentRating, `"` + req.body.comment_image + `"`
+    ], function (result) {
+      console.log(result);
+      slist.posts(req.params.id, function (sposts) {
+        console.log(sposts);
+        slist.comments(req.params.id, function (scoms) {
+          console.log(scoms);
+          res.render("post", { sposts: sposts, scoms: scoms });
+        });
+      });
+    });
+});
+
+
 
 //login page
 router.get("/login", function (req, res) {
@@ -78,7 +124,6 @@ router.post("/upload", function (req, res) {
     res.status(400).send("No files were uploaded.");
     return;
   }
-  console.log("req.files >>>", req.files);
 
   photo = req.files.locationPhoto;
 
@@ -87,8 +132,9 @@ router.post("/upload", function (req, res) {
   photo.mv(uploadPath, function (err) {
     if (err) {
       return res.status(500).send(err);
-    }
-    console.log("File uploaded to " + uploadPath);
+    } else {
+      console.log("File uploaded to " + uploadPath);
+    };
   });
 });
 

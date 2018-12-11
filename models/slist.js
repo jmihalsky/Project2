@@ -27,12 +27,12 @@ var slist = {
     });
   },
   dlt_comments: function (comment_id, qryres) {
-    orm.comment_dlt(comment_id, function(res){
+    orm.comment_dlt(comment_id, function (res) {
       qryres(res);
     });
   },
-  crt_comment: function (vals,qryres){
-    orm.comment_crt(vals, function(res){
+  createComment: function (col, vals, qryres) {
+    orm.create_comment("Comments", col, vals, function (res) {
       qryres(res);
     });
   },
