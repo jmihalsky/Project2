@@ -27,18 +27,16 @@ router.get("/post/:id", function(req, res) {
 
 // comment - delete route
 
-router.delete("/api/comments/:id", function(req, res) {
-  console.log("deleting comment " + req.params.id);
-  slist.dlt_comments(req.params.id, function(result) {
-    console.log(result);
-    //refreshes page...
-    slist.posts(req.params.id, function (sposts) {
-      console.log(sposts);
-      slist.comments(req.params.id, function (scoms) {
-        console.log(scoms);
-        res.render("post", { sposts: sposts, scoms: scoms });
-      });
-    });
+router.delete("/api/comments/:id", function (req, res) {
+  var condition = req.params.id;
+
+  slist.dlt_comments(condition, function (result) {
+    if (result.affectedRows == 0) {
+      // If no rows were changed, then the ID must not exist, so 404
+      return res.status(404).end();
+    } else {
+      res.status(200).end();
+    }
   });
 });
 

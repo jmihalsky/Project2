@@ -26,8 +26,8 @@ var slist = {
       qryres(res);
     });
   },
-  dlt_comments: function (comment_id, qryres) {
-    orm.comment_dlt(comment_id, function (res) {
+  dlt_comments: function (condition, qryres) {
+    orm.comment_dlt("Comments", condition, function (res) {
       qryres(res);
     });
   },
