@@ -64,21 +64,23 @@ function checkSearch(zipState, cityState, searchParam) {
 };
 
 //delete Comment on post.handlebars page
-$(".delcomment").on("click", function (event) {
-  event.preventDefault();
+$(".delete-com").on("click", function (event) {
+  var id = $(this).data("id");
 
-  var id = $(this).val();
   console.log("deleting");
   // Send the DELETE request
+
   $.ajax("/api/comments/" + id, {
     type: "DELETE"
   }).then(
     function () {
-      console.log("Finished");
-      // Reload the page 
-    }
-  );
+      console.log("deleted comment = ", id);
+      // Reload the page to get the updated list
+      location.reload();
+    });
 });
+
+
 
 //add button for New Comment (photo upload sent through /uploadcomment api call seperately)
 $("#add-comm").submit(function (event) {

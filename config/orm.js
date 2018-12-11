@@ -42,18 +42,11 @@ var orm = {
 
     });
   },
-  comment_dlt: function (comment_id, qryres) {
-    var qrystrg = "delete from Comments where CommentID = " + comment_id;
+  comment_dlt: function (table, id, qryres) {
+    var qrystrg = "DELETE FROM " + table + " WHERE CommentID = " + id;
     connection.query(qrystrg, function (err, res) {
-      if (err) {
-        res.json = ({ success: false });
-        qryres(res);
-      }
-      else {
-        console.log("Deleted");
-        res.json = ({ success: true });
-        qryres(res);
-      }
+      if (err) throw err;
+      qryres(res);
     });
   },
   create_comment: function (table, col, val, qryres) {
