@@ -31,11 +31,8 @@
                     <p><span class="label">User:</span> {{this.comm_user}}</p>
                     <p class="starability-result" data-rating={{this.CommentRating}}></p>
                     <p><span class="label">Review:</span> {{this.CommentText}}</p>
-
-
+                    <img src="{{this.comment_image}}">
                     <button class="delete-com" data-id="{{this.CommentID}}">Delete</button>
-
-
                     <a href="/{{this.CommentID}}">Update this Review</a>
                 </li>
                 {{/each}}
