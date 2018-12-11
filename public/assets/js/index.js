@@ -1,25 +1,25 @@
-//Clicking a learn more button on a post
-$(".button-learn").on("click", function(event) {
+//LEARN MORE BUTTON
+$(".button-learn").on("click", function (event) {
   event.preventDefault();
   var id = $(this).val();
   var url = "/post/" + id;
   window.location = url;
 });
 
-//login button
-$(".login").on("click", function(event) {
+//LOGIN BUTTON
+$(".login").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
 });
 
-//singup button
-$(".signup").on("click", function(event) {
+//SIGNUP BUTTON
+$(".signup").on("click", function (event) {
   event.preventDefault();
   window.location = "/signup";
 });
 
-//Search button
-$("#search").submit(function(event) {
+//SEARCH BUTTON
+$("#search").submit(function (event) {
   event.preventDefault();
   var zipState = false;
   var cityState = false;
@@ -64,30 +64,93 @@ function checkSearch(zipState, cityState, searchParam) {
   }
 }
 
-//delete Comment on post.handlebars page
+//DELETE COMMENT
 $(".delete-com")
-  .on("click", function(event) {
+  .on("click", function (event) {
     var id = $(this).data("id");
     console.log("deleting");
-    // Send the DELETE request
 
     $.ajax("/api/comments/" + id, {
       type: "DELETE"
-    }).then(function(response) {
-      console.log("maybe do something");
+    }).then(function () {
+      console.log("deleted comment = ", id);
+      // Reload the page to get the updated list
+      location.reload();
     });
-  })
-  .then(function() {
-    console.log("deleted comment = ", id);
-    // Reload the page to get the updated list
-    location.reload();
   });
 
-//add button for New Comment (photo upload sent through /uploadcomment api call seperately)
-$("#add-comm").submit(function(event) {
+//ADD REVIEW (photo upload sent through /uploadcomment api call seperately)
+$("#add-comm").submit(function (event) {
+  event.preventDefault();
+
+  var postID = Number($(this).attr("name"));
+  var rating = 0;
+  //Calculate rating
+  if ($("#rate1").is(":checked")) {
+    rating = 1;
+  }
+  if ($("#rate2").is(":checked")) {
+    rating = 2;
+  }
+  if ($("#rate3").is(":checked")) {
+    rating = 3;
+  }
+  if ($("#rate4").is(":checked")) {
+    rating = 4;
+  }
+  if ($("#rate5").is(":checked")) {
+    rating = 5;
+  }
+
+  //set up object ///need to change user id for future!
+  var newComment = {
+    PostID: postID,
+    UserID: 1,
+    CommentText: $("#com").val().trim(),
+    CommentRating: rating,
+    comment_image:
+      "/assets/img/comment_img/" +
+      document.getElementById("inputCommentPhoto").files[0].name
+  };
+
+  $.ajax("/api/comments/" + postID, {
+    type: "POST",
+    data: newComment
+  }).then(function () {
+    console.log("posted new comment");
+    // Reload the page
+    location.reload();
+  });
+});
+
+//UPDATE Comment Form
+$(".update-form").on("submit", function (event) {
+  // Make sure to preventDefault on a submit event.
+  event.preventDefault();
+
+  var updatedComment = {
+    CommentRating: $("#ratings").val().trim(),
+    CommentText: $("#com").val().trim()
+  };
+
+  var id = $(this).data("id");
+
+  // Send the POST request.
+  $.ajax("/api/comments/" + id, {
+    type: "PUT",
+    data: updatedComment
+  }).then(function () {
+    console.log("updated comment");
+    // Reload the page to get the updated list
+    location.assign("/");
+  });
+});
+
+
+//ADD POST (photo upload sent through /upload api call seperately)
+$("#add").submit(function (event) {
   event.preventDefault();
   //determines rating
-  var postID = Number($(this).attr("name"));
   var rating = 0;
   if ($("#rate1").is(":checked")) {
     rating = 1;
@@ -105,125 +168,31 @@ $("#add-comm").submit(function(event) {
     rating = 5;
   }
 
-  $("#add-comm").submit(function(event) {
-    event.preventDefault();
-    console.log("button working");
-  });
+  var zipNum = Number(
+    $("#inputZip").val().trim()
+  );
 
-  $(".update-form").on("submit", function(event) {
-    //set up object ///need to change user id for future!
-    var newComment = {
-      PostID: postID,
-      UserID: 1,
-      CommentText: $("#com")
-        .val()
-        .trim(),
-      CommentRating: rating,
-      comment_image:
-        "/assets/img/comment_img/" +
-        document.getElementById("inputCommentPhoto").files[0].name
-    };
+  //set up object ///need to change user id for future!
+  var newLocation = {
+    UserID: 1,
+    LocationName: $("#inputLocation").val().trim(),
+    LocAddr: $("#inputAddress").val().trim(),
+    City: $("#inputCity").val().trim(),
+    State: $("#inputState").val().trim(),
+    Zip: zipNum,
+    PostText: $("#inputDescription").val().trim(),
+    PostRating: rating,
+    post_image: "/assets/img/post_img/" + document.getElementById("inputPhoto").files[0].name
+  };
 
-    //Send the POST request.
-    $.ajax("/api/comments/" + postID, {
-      type: "POST",
-      data: newComment
-    }).then(function() {
-      console.log("posted new comment");
-      // Reload the page
-      location.reload();
-    });
-  });
-
-  //UPDATE Comment Form
-  $(".update-form").on("submit", function(event) {
-    // Make sure to preventDefault on a submit event.
-    event.preventDefault();
-
-    var updatedComment = {
-      CommentRating: $("#ratings")
-        .val()
-        .trim(),
-      CommentText: $("#com")
-        .val()
-        .trim()
-    };
-
-    var id = $(this).data("id");
-
-    // Send the POST request.
-    $.ajax("/api/comments/" + id, {
-      type: "PUT",
-      data: updatedComment
-    }).then(function() {
-      console.log("updated comment");
-      // Reload the page to get the updated list
-      location.assign("/");
-    });
-  });
-
-  //add button (photo upload sent through /upload api call seperately)
-
-  $("#add").submit(function(event) {
-    event.preventDefault();
-    //determines rating
-    var rating = 0;
-    if ($("#rate1").is(":checked")) {
-      rating = 1;
-    }
-    if ($("#rate2").is(":checked")) {
-      rating = 2;
-    }
-    if ($("#rate3").is(":checked")) {
-      rating = 3;
-    }
-    if ($("#rate4").is(":checked")) {
-      rating = 4;
-    }
-    if ($("#rate5").is(":checked")) {
-      rating = 5;
-    }
-
-    var zipNum = Number(
-      $("#inputZip")
-        .val()
-        .trim()
-    );
-
-    //set up object ///need to change user id for future!
-    var newLocation = {
-      UserID: 1,
-      LocationName: $("#inputLocation")
-        .val()
-        .trim(),
-      LocAddr: $("#inputAddress")
-        .val()
-        .trim(),
-      City: $("#inputCity")
-        .val()
-        .trim(),
-      State: $("#inputState")
-        .val()
-        .trim(),
-      Zip: zipNum,
-      PostText: $("#inputDescription")
-        .val()
-        .trim(),
-      PostRating: rating,
-      post_image:
-        "/assets/img/post_img/" +
-        document.getElementById("inputPhoto").files[0].name
-    };
-
-    console.log(newLocation);
-    // Send the POST request.
-    $.ajax("/newlocation", {
-      type: "POST",
-      data: newLocation
-    }).then(function() {
-      console.log("posted new location");
-      // Reload the page
-      location.reload();
-    });
+  // Send the POST request.
+  $.ajax("/newlocation", {
+    type: "POST",
+    data: newLocation
+  }).then(function () {
+    console.log("posted new location");
+    // Reload the page
+    location.reload();
   });
 });
+
