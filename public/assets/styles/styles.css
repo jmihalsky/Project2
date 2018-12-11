@@ -69,10 +69,16 @@ img {
   margin-right: 5px;
 }
 
+.formBack {
+  background-color: rgba(51, 51, 51, 0.3);
+  padding: 20px;
+}
+
 #add {
   display: inline;
 }
 
 #map {
-  height: 100%;
+  max-width: 100%;
+  height: auto;
 }
