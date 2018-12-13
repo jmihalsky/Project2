@@ -92,10 +92,14 @@ function uploadFile(file) {
     } else {
       console.log(data);
     }
+    delete params.Body;
 
   });
 
 };
+
+
+
 
 // comment - post route
 router.post("/api/comments/:id", function (req, res) {
