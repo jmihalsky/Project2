@@ -28,6 +28,11 @@ img {
   float: right;
 }
 
+.logout {
+  float: right;
+  display: none;
+}
+
 .button {
   margin: 10px;
   background: linear-gradient(to bottom, #24c485, #181818);
