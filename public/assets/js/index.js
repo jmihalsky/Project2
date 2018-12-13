@@ -283,6 +283,7 @@ function validateForm(newLocation) {
 function initMap() {
   var lonetoilet = { lat: 38.1569651, lng: -122.4089516 };
   var ucde = { lat: 38.5727318, lng: -121.4679379 };
+  var sfpt = { lat: 37.8085972, lng: -122.4133604 };
   var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
     center: lonetoilet
@@ -336,5 +337,30 @@ function initMap() {
 
   marker2.addListener("click", function() {
     infowindow2.open(map, marker2);
+  });
+
+  var contentString3 =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">SF Automatic Public Toilet</h1>' +
+    '<div id="bodyContent">' +
+    "<p><b>The Automatic Public Toilet Program</b> was developed because of a growing civic concern about the lack of sufficient public toilet facilities in the City. The toilets automatically clean themselves after each use, and are fully accessible to people with disabilities.</p>" +
+    '<a href="/all"><button class="btn btn-sm button-learn">Learn More</button></a>' +
+    "</div>" +
+    "</div>";
+
+  var infowindow3 = new google.maps.InfoWindow({
+    content: contentString3
+  });
+
+  var marker3 = new google.maps.Marker({
+    position: sfpt,
+    map: map,
+    title: "UCDavis Extension Toilet"
+  });
+
+  marker3.addListener("click", function() {
+    infowindow3.open(map, marker3);
   });
 }
