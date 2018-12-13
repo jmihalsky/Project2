@@ -282,6 +282,8 @@ function validateForm(newLocation) {
 // MAP SCRIPT
 function initMap() {
   var lonetoilet = { lat: 38.1569651, lng: -122.4089516 };
+  var ucde = { lat: 38.5727318, lng: -121.4679379 };
+  var sfpt = { lat: 37.8085972, lng: -122.4133604 };
   var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
     center: lonetoilet
@@ -307,7 +309,58 @@ function initMap() {
     map: map,
     title: "The Lone Toilet - Sonoma, CA"
   });
+
   marker.addListener("click", function() {
     infowindow.open(map, marker);
+  });
+
+  var contentString2 =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">UCDavis Extension Toilet</h1>' +
+    '<div id="bodyContent">' +
+    "<p><b>UCDavis Extension Toilet</b> - UC Davis Extension connects working professionals, businesses and students from around the world to the knowledge and resources of UC Davis. Inside the Extension is a private lavatory that requires a Secret Code to get in.</p>" +
+    '<a href="/all"><button class="btn btn-sm button-learn">Learn More</button></a>' +
+    "</div>" +
+    "</div>";
+
+  var infowindow2 = new google.maps.InfoWindow({
+    content: contentString2
+  });
+
+  var marker2 = new google.maps.Marker({
+    position: ucde,
+    map: map,
+    title: "UCDavis Extension Toilet"
+  });
+
+  marker2.addListener("click", function() {
+    infowindow2.open(map, marker2);
+  });
+
+  var contentString3 =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">SF Automatic Public Toilet</h1>' +
+    '<div id="bodyContent">' +
+    "<p><b>The Automatic Public Toilet Program</b> was developed because of a growing civic concern about the lack of sufficient public toilet facilities in the City. The toilets automatically clean themselves after each use, and are fully accessible to people with disabilities.</p>" +
+    '<a href="/all"><button class="btn btn-sm button-learn">Learn More</button></a>' +
+    "</div>" +
+    "</div>";
+
+  var infowindow3 = new google.maps.InfoWindow({
+    content: contentString3
+  });
+
+  var marker3 = new google.maps.Marker({
+    position: sfpt,
+    map: map,
+    title: "UCDavis Extension Toilet"
+  });
+
+  marker3.addListener("click", function() {
+    infowindow3.open(map, marker3);
   });
 }
