@@ -2,8 +2,7 @@ var express = require("express");
 var PORT = process.env.PORT || 3000;
 var app = express();
 var fileUpload = require('express-fileupload');
-var aws = require('aws-sdk');
-var S3_BUCKET = process.env.S3_BUCKET;
+var env = require("dotenv").config();
 
 
 
@@ -29,8 +28,7 @@ app.listen(PORT, function () {
 });
 
 
-//aws config
-aws.config.region = 'eu-east-1';
+
 
 // Passport Usage
 var passport = require("passport");
