@@ -11,7 +11,6 @@ var s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 AWS.config.region = 'eu-east-1';
-
 //homepage
 router.get("/", function (req, res) {
   res.render("index");
