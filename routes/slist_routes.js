@@ -1,7 +1,9 @@
 var express = require("express");
 var router = express.Router();
 var slist = require("../models/slist.js");
-var passport = require("passport");
+var db = require("../smodels");
+var passport = require("../config/passport");
+var isAuthenticated = require("../config/middleware/isAuthenticated");
 var path = require("path");
 //var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 //var S3_BUCKET = process.env.S3_BUCKET;
@@ -41,16 +43,23 @@ router.get("/post/:id", function (req, res) {
 
 // comment - delete route
 router.delete("/api/comments/:id", function (req, res) {
-  var condition = req.params.id;
+  if(!req.user)
+  {
+    res.redirect("/login");
+  }
+  else
+  {
+    var condition = req.params.id;
 
-  slist.dlt_comments(condition, function (result) {
-    if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
-      return res.status(404).end();
-    } else {
-      res.status(200).end();
-    }
-  });
+    slist.dlt_comments(condition, function (result) {
+      if (result.affectedRows == 0) {
+        // If no rows were changed, then the ID must not exist, so 404
+        return res.status(404).end();
+      } else {
+        res.status(200).end();
+      }
+    });
+  }
 });
 
 
@@ -150,21 +159,25 @@ function uploadFile(file) {
 
 // comment - post route
 router.post("/api/comments/:id", function (req, res) {
-  slist.createComment([
-    "PostID", "UserID", "CommentText", "CommentRating", "comment_image"
-  ], [
-      req.body.PostID, req.body.UserID, `"` + req.body.CommentText + `"`, req.body.CommentRating, `"` + req.body.comment_image + `"`
-    ], function (result) {
-      console.log(result);
-      slist.posts(req.params.id, function (sposts) {
-        console.log(sposts);
-        slist.comments(req.params.id, function (scoms) {
-          console.log(scoms);
-          res.render("post", { sposts: sposts, scoms: scoms });
+  if(!req.user)
+  {
+    res.redirect("/login");
+  }
+  else
+  {
+    slist.createComment(
+      ["PostID", "UserID", "CommentText", "CommentRating", "comment_image"], 
+      [req.body.PostID, req.user.UserID, `"` + req.body.CommentText + `"`, req.body.CommentRating, `"` + req.body.comment_image + `"`], function (result) {
+        console.log(result);
+        slist.posts(req.params.id, function (sposts) {
+          console.log(sposts);
+          slist.comments(req.params.id, function (scoms) {
+            console.log(scoms);
+            res.render("post", { sposts: sposts, scoms: scoms });
+          });
         });
-      });
     });
-
+  }
 });
 
 //login page
@@ -210,82 +223,62 @@ router.post("/upload", function (req, res) {
 });
 
 //Sending new Location to MySQL
-router.post("/newlocation", function (req, res) {
-  slist.createLocation(
-    [
-      "UserID",
-      "LocationName",
-      "LocAddr",
-      "City",
-      "State",
-      "Zip",
-      "PostText",
-      "PostRating",
-      "post_image"
-    ],
-    [
-      req.body.UserID,
-      `"` + req.body.LocationName + `"`,
-      `"` + req.body.LocAddr + `"`,
-      `"` + req.body.City + `"`,
-      `"` + req.body.State + `"`,
-      req.body.Zip,
-      `"` + req.body.PostText + `"`,
-      req.body.PostRating,
-      `"` + req.body.post_image + `"`
-    ],
-    function (sposts) {
-      var slistposts = {
-        sposts: sposts
-      };
-      res.render("index", slistposts);
-    }
-  );
+router.post("/newlocation", function(req, res) {
+  if(!req.user)
+  {
+    res.redirect("/login");
+  }
+  else
+  {
+    slist.createLocation(
+      [
+        "UserID",
+        "LocationName",
+        "LocAddr",
+        "City",
+        "State",
+        "Zip",
+        "PostText",
+        "PostRating",
+        "post_image"
+      ],
+      [
+        req.user.UserID,
+        `"` + req.body.LocationName + `"`,
+        `"` + req.body.LocAddr + `"`,
+        `"` + req.body.City + `"`,
+        `"` + req.body.State + `"`,
+        req.body.Zip,
+        `"` + req.body.PostText + `"`,
+        req.body.PostRating,
+        `"` + req.body.post_image + `"`
+      ],
+      function(sposts) {
+        var slistposts = {
+          sposts: sposts
+        };
+        res.render("index", slistposts);
+      }
+    );
+  }
 });
 
-///look at stuff below!
-// User Login Route
-router.get("/", function (req, res, next) {
-  res.sendFile(path.join(__dirname, "../views/login.handlebars"));
+router.post("/api/signup",function(req,res){
+  console.log(req.body);
+  db.Usr.create({
+    username: req.body.username,
+    pword: req.body.pword,
+    email: req.body.email
+  }).then(function(){
+    res.redirect(307,"/api/login");
+  }).catch(function(err){
+    res.json(err);
+  });
 });
 
-router.post(
-  "/",
-  passport.authenticate("local", {
-    successRedirect: "/users",
-    failureRedirect: "/"
-  })
-);
-
-//  Register New User Route
-router.get("/", function (req, res, next) {
-  res.sendFile(path.resolve(__dirname, "../views/register.html"));
-});
-
-router.post("/", function (req, res, next) {
-  pg.connect(
-    connectionString,
-    function (err, client) {
-      var query = client.query(
-        "INSERT INTO users (username, password) VALUES ($1, $2)",
-        [request.body.username, request.body.password]
-      );
-
-      query.on("error", function (err) {
-        console.log(err);
-      });
-
-      query.on("end", function () {
-        response.sendStatus(200);
-        client.end();
-      });
-    }
-  );
-});
-
-//  User authenticated
-router.get("/", function (req, res, next) {
-  res.send(req.isAuthenticated());
+router.post("/api/login", passport.authenticate("local"),function(req,res){
+  console.log(req.user);
+  res.json("/");
 });
 
 module.exports = router;
