@@ -3,7 +3,14 @@ var router = express.Router();
 var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+//var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+//var S3_BUCKET = process.env.S3_BUCKET;
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
+AWS.config.region = 'eu-east-1';
 
 //homepage
 router.get("/", function (req, res) {
@@ -53,71 +60,91 @@ router.post("/uploadcomment", function (req, res) {
     return;
   } else {
     var file = req.files.commentPhoto;
-    getSignedRequest(file);
+    console.log("button clicked -" + file);
+    uploadFile(file);
+    //getSignedRequest(file);
   }
 });
 
-function getSignedRequest(file) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        uploadFile(file, response.signedRequest, response.url);
-      }
-      else {
-        console.log('Could not get signed URL.');
-      }
-    }
-  };
-  xhr.send();
-}
+function uploadFile(file) {
+  console.log("running uploadfile");
 
-function uploadFile(file, signedRequest, url) {
-  const xhr = new XMLHttpRequest();
-  xhr.open('PUT', signedRequest);
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        console.log("photo uploaded: " + url);
-        // document.getElementById('preview').src = url;
-        // document.getElementById('avatar-url').value = url;
-      }
-      else {
-        console.log('Could not upload file.');
-      }
-    }
-  };
-  xhr.send(file);
-}
-
-//getting signed url from aws
-router.get('/sign-s3', (req, res) => {
-  const s3 = new aws.S3();
-  const fileName = req.query['file-name'];
-  const fileType = req.query['file-type'];
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: fileName,
+  var s3params = {
+    Bucket: 'sh1tlist', // pass your bucket name
+    Key: file.name,
     Expires: 60,
-    ContentType: fileType,
+    ContentType: file.type,
+    Body: file.data,
     ACL: 'public-read'
   };
 
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.end();
-    }
-    const returnData = {
-      signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
-    };
-    res.write(JSON.stringify(returnData));
-    res.end();
+  s3.upload(s3params, function (s3Err, data) {
+    if (s3Err) throw s3Err
+    console.log(`File uploaded successfully at ${data.Location}`)
   });
-});
+};
+
+// function getSignedRequest(file) {
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+//   xhr.onreadystatechange = () => {
+//     if (xhr.readyState === 4) {
+//       if (xhr.status === 200) {
+//         const response = JSON.parse(xhr.responseText);
+//         uploadFile(file, response.signedRequest, response.url);
+//       }
+//       else {
+//         console.log('Could not get signed URL.');
+//       }
+//     }
+//   };
+//   xhr.send();
+// }
+
+// function uploadFile(file, signedRequest, url) {
+//   const xhr = new XMLHttpRequest();
+//   xhr.open('PUT', signedRequest);
+//   xhr.onreadystatechange = () => {
+//     if (xhr.readyState === 4) {
+//       if (xhr.status === 200) {
+//         console.log("photo uploaded: " + url);
+//         // document.getElementById('preview').src = url;
+//         // document.getElementById('avatar-url').value = url;
+//       }
+//       else {
+//         console.log('Could not upload file.');
+//       }
+//     }
+//   };
+//   xhr.send(file);
+// }
+
+// //getting signed url from aws
+// router.get('/sign-s3', (req, res) => {
+//   const s3 = new aws.S3();
+//   const fileName = req.query['file-name'];
+//   const fileType = req.query['file-type'];
+//   const s3Params = {
+//     Bucket: S3_BUCKET,
+//     Key: fileName,
+//     Expires: 60,
+//     ContentType: fileType,
+//     ACL: 'public-read'
+//   };
+
+//   s3.getSignedUrl('putObject', s3Params, (err, data) => {
+//     if (err) {
+//       console.log(err);
+//       return res.end();
+//     }
+//     const returnData = {
+//       signedRequest: data,
+//       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+//     };
+//     res.write(JSON.stringify(returnData));
+//     res.end();
+//   });
+// });
 
 
 // comment - post route
@@ -176,7 +203,8 @@ router.post("/upload", function (req, res) {
     return;
   } else {
     var file = req.files.commentPhoto;
-    getSignedRequest(file);
+    uploadFile(file);
+    //getSignedRequest(file);
   }
 });
 

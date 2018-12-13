@@ -112,10 +112,9 @@ $("#add-comm").submit(function(event) {
   if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    photo =
-      "/assets/img/comment_img/" +
-      document.getElementById("inputCommentPhoto").files[0].name;
-  }
+
+    photo = "https://sh1tlist.s3.amazonaws.com/" + document.getElementById("inputCommentPhoto").files[0].name;
+  };
 
   //set up object ///need to change user id for future!
   var newComment = {
@@ -212,10 +211,9 @@ $("#add").submit(function(event) {
   if (document.getElementById("inputPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    photo =
-      "/assets/img/post_img/" +
-      document.getElementById("inputPhoto").files[0].name;
-  }
+
+    photo = "https://sh1tlist.s3.amazonaws.com/" + document.getElementById("inputPhoto").files[0].name;
+  };
 
   //set up object ///need to change user id for future!
   var newLocation = {
