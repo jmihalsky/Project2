@@ -5,12 +5,14 @@ var passport = require("passport");
 var path = require("path");
 //var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 //var S3_BUCKET = process.env.S3_BUCKET;
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3({
+var aws = require('aws-sdk');
+aws.config.region = 'us-west-1';
+
+let s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.S3_AWS_SECRET_ACCESS_KEY
 });
-AWS.config.region = 'eu-east-1';
+
 //homepage
 router.get("/", function (req, res) {
   res.render("index");
