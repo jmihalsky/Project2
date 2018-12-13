@@ -282,6 +282,7 @@ function validateForm(newLocation) {
 // MAP SCRIPT
 function initMap() {
   var lonetoilet = { lat: 38.1569651, lng: -122.4089516 };
+  var ucde = { lat: 38.5727318, lng: -121.4679379 };
   var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 9,
     center: lonetoilet
@@ -307,7 +308,33 @@ function initMap() {
     map: map,
     title: "The Lone Toilet - Sonoma, CA"
   });
+
   marker.addListener("click", function() {
     infowindow.open(map, marker);
+  });
+
+  var contentString2 =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    "</div>" +
+    '<h1 id="firstHeading" class="firstHeading">UCDavis Extension Toilet</h1>' +
+    '<div id="bodyContent">' +
+    "<p><b>UCDavis Extension Toilet</b> - UC Davis Extension connects working professionals, businesses and students from around the world to the knowledge and resources of UC Davis. Inside the Extension is a private lavatory that requires a Secret Code to get in.</p>" +
+    '<a href="/all"><button class="btn btn-sm button-learn">Learn More</button></a>' +
+    "</div>" +
+    "</div>";
+
+  var infowindow2 = new google.maps.InfoWindow({
+    content: contentString2
+  });
+
+  var marker2 = new google.maps.Marker({
+    position: ucde,
+    map: map,
+    title: "UCDavis Extension Toilet"
+  });
+
+  marker2.addListener("click", function() {
+    infowindow2.open(map, marker2);
   });
 }
