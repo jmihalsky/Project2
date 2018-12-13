@@ -2,7 +2,6 @@ var express = require("express");
 var session = require("express-session");
 var PORT = process.env.PORT || 3000;
 var app = express();
-var fileUpload = require('express-fileupload');
 var env = require("dotenv").config();
 
 var passport = require("./config/passport");
@@ -12,8 +11,6 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(fileUpload());
-
 var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -21,7 +18,7 @@ app.set("view engine", "handlebars");
 
 var routes = require("./routes/slist_routes.js");
 
-app.use(session({secret: "keyboard cat", resave: true, saveUninitialized: true}));
+app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
