@@ -3,6 +3,7 @@ var router = express.Router();
 var slist = require("../models/slist.js");
 var passport = require("passport");
 var path = require("path");
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 //homepage
 router.get("/", function (req, res) {
@@ -31,7 +32,6 @@ router.get("/post/:id", function (req, res) {
 });
 
 // comment - delete route
-
 router.delete("/api/comments/:id", function (req, res) {
   var condition = req.params.id;
 
@@ -48,27 +48,76 @@ router.delete("/api/comments/:id", function (req, res) {
 
 //Uploading new comment images
 router.post("/uploadcomment", function (req, res) {
-  var photo;
-  var uploadPath;
-
   if (Object.keys(req.files).length == 0) {
     res.status(400).send("No files were uploaded.");
     return;
+  } else {
+    var file = req.files.commentPhoto;
+    getSignedRequest(file);
   }
-
-  photo = req.files.commentPhoto;
-
-  uploadPath = "/assets/img/comment_img/" + photo.name;
-  photo.mv(uploadPath, function (err) {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      console.log("File uploaded to " + uploadPath);
-    };
-  });
 });
 
+function getSignedRequest(file) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText);
+        uploadFile(file, response.signedRequest, response.url);
+      }
+      else {
+        console.log('Could not get signed URL.');
+      }
+    }
+  };
+  xhr.send();
+}
 
+function uploadFile(file, signedRequest, url) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('PUT', signedRequest);
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log("photo uploaded: " + url);
+        // document.getElementById('preview').src = url;
+        // document.getElementById('avatar-url').value = url;
+      }
+      else {
+        console.log('Could not upload file.');
+      }
+    }
+  };
+  xhr.send(file);
+}
+
+//getting signed url from aws
+router.get('/sign-s3', (req, res) => {
+  const s3 = new aws.S3();
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
 
 
 // comment - post route
@@ -89,8 +138,6 @@ router.post("/api/comments/:id", function (req, res) {
     });
 
 });
-
-
 
 //login page
 router.get("/login", function (req, res) {
@@ -123,25 +170,14 @@ router.get("/zip_search/:zip", function (req, res) {
 
 //Uploading "new post images!"
 router.post("/upload", function (req, res) {
-  var photo;
-  var uploadPath;
 
   if (Object.keys(req.files).length == 0) {
     res.status(400).send("No files were uploaded.");
     return;
+  } else {
+    var file = req.files.commentPhoto;
+    getSignedRequest(file);
   }
-
-  photo = req.files.locationPhoto;
-
-  uploadPath = "/assets/img/post_img/" + photo.name;
-
-  photo.mv(uploadPath, function (err) {
-    if (err) {
-      return res.status(500).send(err);
-    } else {
-      console.log("File uploaded to " + uploadPath);
-    };
-  });
 });
 
 //Sending new Location to MySQL
