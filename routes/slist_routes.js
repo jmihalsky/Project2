@@ -10,7 +10,7 @@ aws.config.region = 'us-west-1';
 
 let s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_AWS_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 //homepage
