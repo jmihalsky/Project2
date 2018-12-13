@@ -1,12 +1,3 @@
-var AWS = require('aws-sdk');
-
-var s3 = new AWS.S3({
-  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-});
-
-
 //LEARN MORE BUTTON
 $(".button-learn").on("click", function (event) {
   event.preventDefault();
