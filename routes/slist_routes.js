@@ -6,7 +6,7 @@ var path = require("path");
 //var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 //var S3_BUCKET = process.env.S3_BUCKET;
 var aws = require('aws-sdk');
-aws.config.region = 'us-west-1';
+aws.config.region = 'us-east-1';
 
 let s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
