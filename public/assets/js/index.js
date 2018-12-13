@@ -258,9 +258,9 @@ function validateForm(newLocation) {
 };
 
 // MAP SCRIPT
-var map;
+var map, InfoWindow;
 var markers = [];
-var infoWindow;
+// var infoWindow;
 var locationSelect;
 
 function initMap() {
@@ -287,6 +287,44 @@ function initMap() {
     }
   };
 }
+
+
+// shows current location
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"),{
+    center: {lat: 38.5727318, lng: -121.4679379},
+    zoom: 6
+  });
+  infoWindow = new google.maps.InfoWindow;
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position){
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent("Location Found.");
+      infoWindow.open(map);
+      map.setCenter(pos);
+    }, function() {
+      handleLocationERROR(true, infoWindow, map.getCenter());
+    });
+  } else {
+    handleLocationERROR(false, infoWindow, map.getCenter());
+  }
+};
+
+function handleLocationERROR(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation?
+    "ERROR: The Geolocation service failed.":
+    "ERROR: Your browser doesn\'T support geolocation.");
+    infoWindow.open(map);
+}
+
+
 
 function searchLocations() {
   var address = document.getElementById("addressInput").value;
