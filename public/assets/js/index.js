@@ -1,5 +1,14 @@
+var AWS = require('aws-sdk');
+
+var s3 = new AWS.S3({
+  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
+  region: 'us-east-1',
+});
+
+
 //LEARN MORE BUTTON
-$(".button-learn").on("click", function(event) {
+$(".button-learn").on("click", function (event) {
   event.preventDefault();
   var id = $(this).val();
   var url = "/post/" + id;
@@ -7,25 +16,25 @@ $(".button-learn").on("click", function(event) {
 });
 
 //LOGIN BUTTON
-$(".login").on("click", function(event) {
+$(".login").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
 });
 
 //VIEW ALL BUTTON
-$("#view-all").on("click", function(event) {
+$("#view-all").on("click", function (event) {
   event.preventDefault();
   window.location = "/all";
 });
 
 //SIGNUP BUTTON
-$(".signup").on("click", function(event) {
+$(".signup").on("click", function (event) {
   event.preventDefault();
   window.location = "/signup";
 });
 
 //SEARCH BUTTON
-$("#search").submit(function(event) {
+$("#search").submit(function (event) {
   event.preventDefault();
   var zipState = false;
   var cityState = false;
@@ -71,13 +80,13 @@ function checkSearch(zipState, cityState, searchParam) {
 }
 
 //DELETE COMMENT
-$(".delete-com").on("click", function(event) {
+$(".delete-com").on("click", function (event) {
   var id = $(this).data("id");
   console.log("deleting");
 
   $.ajax("/api/comments/" + id, {
     type: "DELETE"
-  }).then(function() {
+  }).then(function () {
     console.log("deleted comment = ", id);
     // Reload the page to get the updated list
     location.reload();
@@ -85,7 +94,7 @@ $(".delete-com").on("click", function(event) {
 });
 
 //ADD REVIEW (photo upload sent through /uploadcomment api call seperately)
-$("#add-comm").submit(function(event) {
+$("#add-comm").submit(function (event) {
   event.preventDefault();
 
   var postID = Number($(this).attr("name"));
@@ -112,8 +121,20 @@ $("#add-comm").submit(function(event) {
   if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
     photo = "";
   } else {
+    var file = document.getElementById("inputCommentPhoto").files[0]
 
-    photo = "https://sh1tlist.s3.amazonaws.com/" + document.getElementById("inputCommentPhoto").files[0].name;
+    var params = {
+      Key: file.name,
+      Bucket: process.env.BUCKETEER_BUCKET_NAME,
+      Body: file.data,
+    };
+
+    s3.getObject(params, function put(err, data) {
+      if (err) console.log(err, err.stack);
+      else console.log(data);
+      console.log(data.Body.toString());
+      photo = data;
+    });
   };
 
   //set up object ///need to change user id for future!
@@ -144,7 +165,7 @@ function validateFormComment(newComment) {
     $.ajax("/api/comments/" + newComment.PostID, {
       type: "POST",
       data: newComment
-    }).then(function() {
+    }).then(function () {
       console.log("posted new comment");
       // Reload the page
       location.reload();
@@ -153,7 +174,7 @@ function validateFormComment(newComment) {
 }
 
 //UPDATE Comment Form
-$(".update-form").on("submit", function(event) {
+$(".update-form").on("submit", function (event) {
   // Make sure to preventDefault on a submit event.
   event.preventDefault();
 
@@ -172,7 +193,7 @@ $(".update-form").on("submit", function(event) {
   $.ajax("/api/comments/" + id, {
     type: "PUT",
     data: updatedComment
-  }).then(function() {
+  }).then(function () {
     console.log("updated comment");
     // Reload the page to get the updated list
     location.assign("/");
@@ -180,7 +201,7 @@ $(".update-form").on("submit", function(event) {
 });
 
 //ADD POST (photo upload sent through /upload api call seperately)
-$("#add").submit(function(event) {
+$("#add").submit(function (event) {
   event.preventDefault();
   //determines rating
   var rating = 0;
@@ -211,10 +232,21 @@ $("#add").submit(function(event) {
   if (document.getElementById("inputPhoto").files[0] == undefined) {
     photo = "";
   } else {
+    var file = document.getElementById("inputPhoto").files[0]
 
-    photo = "https://sh1tlist.s3.amazonaws.com/" + document.getElementById("inputPhoto").files[0].name;
+    var params = {
+      Key: file.name,
+      Bucket: process.env.BUCKETEER_BUCKET_NAME,
+      Body: file.data,
+    };
+
+    s3.getObject(params, function put(err, data) {
+      if (err) console.log(err, err.stack);
+      else console.log(data);
+      console.log(data.Body.toString());
+      photo = data;
+    });
   };
-
   //set up object ///need to change user id for future!
   var newLocation = {
     UserID: 1,
@@ -269,7 +301,7 @@ function validateForm(newLocation) {
     $.ajax("/newlocation", {
       type: "POST",
       data: newLocation
-    }).then(function() {
+    }).then(function () {
       console.log("posted new location");
       // Reload the page
       location.reload();
@@ -308,7 +340,7 @@ function initMap() {
     title: "The Lone Toilet - Sonoma, CA"
   });
 
-  marker.addListener("click", function() {
+  marker.addListener("click", function () {
     infowindow.open(map, marker);
   });
 
@@ -333,7 +365,7 @@ function initMap() {
     title: "UCDavis Extension Toilet"
   });
 
-  marker2.addListener("click", function() {
+  marker2.addListener("click", function () {
     infowindow2.open(map, marker2);
   });
 
@@ -358,7 +390,7 @@ function initMap() {
     title: "UCDavis Extension Toilet"
   });
 
-  marker3.addListener("click", function() {
+  marker3.addListener("click", function () {
     infowindow3.open(map, marker3);
   });
 }
