@@ -7,7 +7,7 @@ $(".button-learn").on("click", function (event) {
 });
 
 //LOGIN BUTTON
-$(".login").on("click", function (event) {
+$("#login-btn").on("click", function (event) {
   event.preventDefault();
   window.location = "/login";
 });

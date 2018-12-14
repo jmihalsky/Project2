@@ -24,11 +24,11 @@ img {
   padding-right: 10px;
 }
 
-.login {
+#login-btn {
   float: right;
 }
 
-.logout {
+#logout-btn {
   float: right;
   display: none;
 }
