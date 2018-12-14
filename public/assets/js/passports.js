@@ -64,9 +64,45 @@ $("#login-form").submit(function(event){
             type: "POST",
             data: ldata
         }).then(function(data){
+            // $("#login-btn").css("display","none");
+            // $("#logout-btn").css("display","block");
+            sessionStorage.setItem("lstatus", JSON.stringify({status: true}));
             window.location.replace(data);
         }).catch(function(err){
             console.log(err);
         })
     }
+});
+
+lbutton();
+
+function lbutton(){
+    var lstatus = sessionStorage.getItem("lstatus");
+    console.log(lstatus);
+    if(lstatus == null)
+    {
+        console.log("working");
+        $("#login-btn").css("display","block");
+        $("#logout-btn").css("display","none");
+    }
+    else
+    {
+        var lstatus_stg = JSON.parse(lstatus);
+        if(lstatus_stg.status === true)
+        {
+            $("#login-btn").css("display","none");
+            $("#logout-btn").css("display","block");
+        }
+        else
+        {
+            $("#login-btn").css("display","block");
+            $("#logout-btn").css("display","none");
+        }
+    }
+};
+
+$("#logout-btn").on("click", function(event){
+    event.preventDefault();
+    window.location = "/logout";
+    sessionStorage.setItem("lstatus", JSON.stringify({status: false}));
 });
