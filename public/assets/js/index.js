@@ -1,10 +1,3 @@
-var AWS = require('aws-sdk');
-
-var s3 = new AWS.S3({
-  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-});
 
 
 //LEARN MORE BUTTON
@@ -122,19 +115,7 @@ $("#add-comm").submit(function (event) {
     photo = "";
   } else {
     var file = document.getElementById("inputCommentPhoto").files[0]
-
-    var params = {
-      Key: file.name,
-      Bucket: process.env.BUCKETEER_BUCKET_NAME,
-      Body: file.data,
-    };
-
-    s3.getObject(params, function put(err, data) {
-      if (err) console.log(err, err.stack);
-      else console.log(data);
-      console.log(data.Body.toString());
-      photo = data;
-    });
+    photo = file.name;
   };
 
   //set up object ///need to change user id for future!
@@ -233,19 +214,7 @@ $("#add").submit(function (event) {
     photo = "";
   } else {
     var file = document.getElementById("inputPhoto").files[0]
-
-    var params = {
-      Key: file.name,
-      Bucket: process.env.BUCKETEER_BUCKET_NAME,
-      Body: file.data,
-    };
-
-    s3.getObject(params, function put(err, data) {
-      if (err) console.log(err, err.stack);
-      else console.log(data);
-      console.log(data.Body.toString());
-      photo = data;
-    });
+    photo = file.name;
   };
   //set up object ///need to change user id for future!
   var newLocation = {
