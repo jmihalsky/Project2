@@ -113,19 +113,7 @@ $("#add-comm").submit(function (event) {
     photo = "";
   } else {
     var file = document.getElementById("inputCommentPhoto").files[0]
-
-    var params = {
-      Key: file.name,
-      Bucket: process.env.BUCKETEER_BUCKET_NAME,
-      Body: file.data,
-    };
-
-    s3.getObject(params, function put(err, data) {
-      if (err) console.log(err, err.stack);
-      else console.log(data);
-      console.log(data.Body.toString());
-      photo = data;
-    });
+    photo = "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" + file.name;
   };
 
   //set up object ///need to change user id for future!
@@ -224,19 +212,7 @@ $("#add").submit(function (event) {
     photo = "";
   } else {
     var file = document.getElementById("inputPhoto").files[0]
-
-    var params = {
-      Key: file.name,
-      Bucket: process.env.BUCKETEER_BUCKET_NAME,
-      Body: file.data,
-    };
-
-    s3.getObject(params, function put(err, data) {
-      if (err) console.log(err, err.stack);
-      else console.log(data);
-      console.log(data.Body.toString());
-      photo = data;
-    });
+    photo = "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" + file.name;;
   };
   //set up object ///need to change user id for future!
   var newLocation = {

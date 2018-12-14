@@ -92,8 +92,6 @@ function uploadFile(file) {
     } else {
       console.log(data);
     }
-    delete params.Body;
-
   });
 
 };
