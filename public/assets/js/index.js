@@ -1,5 +1,3 @@
-
-
 //LEARN MORE BUTTON
 $(".button-learn").on("click", function (event) {
   event.preventDefault();
