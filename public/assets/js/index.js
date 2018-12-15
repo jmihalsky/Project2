@@ -365,3 +365,58 @@ function initMap() {
     infowindow3.open(map, marker3);
   });
 }
+
+// shows current location
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"),{
+    center: {lat: 38.5727318, lng: -121.4679379},
+    zoom: 6
+  });
+  infoWindow = new google.maps.InfoWindow;
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position){
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent("Location Found.");
+      infoWindow.open(map);
+      map.setCenter(pos);
+    }, function() {
+      handleLocationERROR(true, infoWindow, map.getCenter());
+    });
+  } else {
+    handleLocationERROR(false, infoWindow, map.getCenter());
+  };
+
+
+// // connects markers to database....."theoretically"
+//   var script = document.createElement("script");
+
+// script.src = "slist";
+// document.getElementsByTagName("head")[0].appendChild(script);
+
+};
+
+window.eqfeed_callback = function(results) {
+  for (var i = 0; i < results.features.length; i++) {
+    var coords = results.features[i].geometry.coordinates;
+    var latLng = new google.maps.LatLng(coords[1],coords[0]);
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+  }
+}
+
+
+function handleLocationERROR(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation?
+    "ERROR: The Geolocation service failed.":
+    "ERROR: Your browser doesn\'T support geolocation.");
+    infoWindow.open(map);
+}
