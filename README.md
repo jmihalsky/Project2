@@ -5,14 +5,17 @@
 
 #### Project Description: The app will allow users to search for public restrooms in an area. They can see rating of the the restroom, information about access (keys or code needed), tp type, etc. The app will be similar to yelp in that users can add new restrooms and/or add comments.
 
-Technology to be Used:
+Technologies Used:
 
 - MySQL
 - Node & Express
 - Handlebars
-- Google Authentication
-- Maps
-- Heroku to deploy finished app
+- Passport.js
+- Google Maps
+- Heroku
+- Starability.css
+- AWS & Bucketeer
+- ORM Sequelize
 
 <br>
 <a href="https://sh1tlist.herokuapp.com/">Link to Sh!t List!</a>
