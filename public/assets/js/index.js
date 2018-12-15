@@ -1,5 +1,5 @@
 //LEARN MORE BUTTON
-$(".button-learn").on("click", function (event) {
+$(".button-learn").on("click", function(event) {
   event.preventDefault();
   var id = $(this).val();
   var url = "/post/" + id;
@@ -7,25 +7,25 @@ $(".button-learn").on("click", function (event) {
 });
 
 //LOGIN BUTTON
-$("#login-btn").on("click", function (event) {
+$("#login-btn").on("click", function(event) {
   event.preventDefault();
   window.location = "/login";
 });
 
 //VIEW ALL BUTTON
-$("#view-all").on("click", function (event) {
+$("#view-all").on("click", function(event) {
   event.preventDefault();
   window.location = "/all";
 });
 
 //SIGNUP BUTTON
-$(".signup").on("click", function (event) {
+$(".signup").on("click", function(event) {
   event.preventDefault();
   window.location = "/signup";
 });
 
 //SEARCH BUTTON
-$("#search").submit(function (event) {
+$("#search").submit(function(event) {
   event.preventDefault();
   var zipState = false;
   var cityState = false;
@@ -71,13 +71,13 @@ function checkSearch(zipState, cityState, searchParam) {
 }
 
 //DELETE COMMENT
-$(".delete-com").on("click", function (event) {
+$(".delete-com").on("click", function(event) {
   var id = $(this).data("id");
   console.log("deleting");
 
   $.ajax("/api/comments/" + id, {
     type: "DELETE"
-  }).then(function () {
+  }).then(function() {
     console.log("deleted comment = ", id);
     // Reload the page to get the updated list
     location.reload();
@@ -85,7 +85,7 @@ $(".delete-com").on("click", function (event) {
 });
 
 //ADD REVIEW (photo upload sent through /uploadcomment api call seperately)
-$("#add-comm").submit(function (event) {
+$("#add-comm").submit(function(event) {
   event.preventDefault();
 
   var postID = Number($(this).attr("name"));
@@ -112,9 +112,11 @@ $("#add-comm").submit(function (event) {
   if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    var file = document.getElementById("inputCommentPhoto").files[0]
-    photo = "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" + file.name;
-  };
+    var file = document.getElementById("inputCommentPhoto").files[0];
+    photo =
+      "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" +
+      file.name;
+  }
 
   //set up object ///need to change user id for future!
   var newComment = {
@@ -144,7 +146,7 @@ function validateFormComment(newComment) {
     $.ajax("/api/comments/" + newComment.PostID, {
       type: "POST",
       data: newComment
-    }).then(function () {
+    }).then(function() {
       console.log("posted new comment");
       // Reload the page
       location.reload();
@@ -153,7 +155,7 @@ function validateFormComment(newComment) {
 }
 
 //UPDATE Comment Form
-$(".update-form").on("submit", function (event) {
+$(".update-form").on("submit", function(event) {
   // Make sure to preventDefault on a submit event.
   event.preventDefault();
 
@@ -172,7 +174,7 @@ $(".update-form").on("submit", function (event) {
   $.ajax("/api/comments/" + id, {
     type: "PUT",
     data: updatedComment
-  }).then(function () {
+  }).then(function() {
     console.log("updated comment");
     // Reload the page to get the updated list
     location.assign("/");
@@ -180,7 +182,7 @@ $(".update-form").on("submit", function (event) {
 });
 
 //ADD POST (photo upload sent through /upload api call seperately)
-$("#add").submit(function (event) {
+$("#add").submit(function(event) {
   event.preventDefault();
   //determines rating
   var rating = 0;
@@ -211,9 +213,11 @@ $("#add").submit(function (event) {
   if (document.getElementById("inputPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    var file = document.getElementById("inputPhoto").files[0]
-    photo = "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" + file.name;;
-  };
+    var file = document.getElementById("inputPhoto").files[0];
+    photo =
+      "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" +
+      file.name;
+  }
   //set up object ///need to change user id for future!
   var newLocation = {
     UserID: 1,
@@ -268,7 +272,7 @@ function validateForm(newLocation) {
     $.ajax("/newlocation", {
       type: "POST",
       data: newLocation
-    }).then(function () {
+    }).then(function() {
       console.log("posted new location");
       // Reload the page
       location.reload();
@@ -307,7 +311,7 @@ function initMap() {
     title: "The Lone Toilet - Sonoma, CA"
   });
 
-  marker.addListener("click", function () {
+  marker.addListener("click", function() {
     infowindow.open(map, marker);
   });
 
@@ -318,7 +322,7 @@ function initMap() {
     '<h1 id="firstHeading" class="firstHeading">UCDavis Extension Toilet</h1>' +
     '<div id="bodyContent">' +
     "<p><b>UCDavis Extension Toilet</b> - UC Davis Extension connects working professionals, businesses and students from around the world to the knowledge and resources of UC Davis. Inside the Extension is a private lavatory that requires a Secret Code to get in.</p>" +
-    '<a href="/all"><button class="btn btn-sm button-learn">Learn More</button></a>' +
+    '<a href="/post/4"><button class="btn btn-sm button-learn">Learn More</button></a>' +
     "</div>" +
     "</div>";
 
@@ -332,7 +336,7 @@ function initMap() {
     title: "UCDavis Extension Toilet"
   });
 
-  marker2.addListener("click", function () {
+  marker2.addListener("click", function() {
     infowindow2.open(map, marker2);
   });
 
@@ -354,10 +358,10 @@ function initMap() {
   var marker3 = new google.maps.Marker({
     position: sfpt,
     map: map,
-    title: "UCDavis Extension Toilet"
+    title: "SF Automatic Public Toilet"
   });
 
-  marker3.addListener("click", function () {
+  marker3.addListener("click", function() {
     infowindow3.open(map, marker3);
   });
 }
