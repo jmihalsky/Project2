@@ -12,5 +12,6 @@ Technology to be Used:
 - Google Authentication
 - Maps
 - Heroku to deploy finished app
-  <br>
-  <a href="https://sh1tlist.herokuapp.com/">Link to Sh!t List!</a>
+
+<br>
+<a href="https://sh1tlist.herokuapp.com/">Link to Sh!t List!</a>
