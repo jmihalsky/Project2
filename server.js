@@ -1,3 +1,8 @@
+// require("dotenv").config({path: "./config/aws.env"});
+var aws_conn = require("./config/aws_conn.js");
+
+// var aws_conn_keys = aws_conn.aws_keys;
+
 var express = require("express");
 var session = require("express-session");
 var PORT = process.env.PORT || 3000;
