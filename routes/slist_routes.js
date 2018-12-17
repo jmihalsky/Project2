@@ -6,14 +6,9 @@ var passport = require("../config/passport");
 var isAuthenticated = require("../config/middleware/isAuthenticated");
 var path = require("path");
 
-//AWS
-var AWS = require('aws-sdk');
-
-var s3 = new AWS.S3({
-  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-});
+// AWS
+var upload = require("../config/upload.js");
+var singleUpload = upload.single("image");
 
 
 //homepage
@@ -74,31 +69,6 @@ router.post("/uploadcomment", function (req, res) {
   }
 });
 
-
-
-
-function uploadFile(file) {
-
-  var params = {
-    Key: file.name,
-    Bucket: process.env.BUCKETEER_BUCKET_NAME,
-    Body: file.data,
-  };
-
-  s3.putObject(params, function put(err, data) {
-    if (err) {
-      console.log(err, err.stack);
-      return;
-    } else {
-      console.log(data);
-    }
-  });
-
-};
-
-
-
-
 // comment - post route
 router.post("/api/comments/:id", function (req, res) {
   if (!req.user) {
@@ -108,11 +78,8 @@ router.post("/api/comments/:id", function (req, res) {
     slist.createComment(
       ["PostID", "UserID", "CommentText", "CommentRating", "comment_image"],
       [req.body.PostID, req.user.UserID, `"` + req.body.CommentText + `"`, req.body.CommentRating, `"` + req.body.comment_image + `"`], function (result) {
-        console.log(result);
         slist.posts(req.params.id, function (sposts) {
-          console.log(sposts);
           slist.comments(req.params.id, function (scoms) {
-            console.log(scoms);
             res.render("post", { sposts: sposts, scoms: scoms });
           });
         });
@@ -151,15 +118,13 @@ router.get("/zip_search/:zip", function (req, res) {
 
 //Uploading "new post images!"
 router.post("/upload", function (req, res) {
-
-  if (Object.keys(req.files).length == 0) {
-    res.status(400).send("No files were uploaded.");
-    return;
-  } else {
-    var file = req.files.commentPhoto;
-    uploadFile(file);
-    //getSignedRequest(file);
-  }
+  singleUpload(req,res,function(err,some){
+      if(err)
+      {
+          return res.status(422).send({errors: [{title: "image upload error",detail: err.message}]});
+      }
+      return res.json({"imageUrl": req.file.location});
+  });
 });
 
 //Sending new Location to MySQL
