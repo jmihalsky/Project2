@@ -110,47 +110,66 @@ $("#add-comm").submit(function (event) {
   var photo;
 
   if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
-    photo = "";
-  } else {
-    var file = document.getElementById("inputCommentPhoto").files[0]
-    photo = "https://s3.us-east-2.amazonaws.com/jamposttest/" + file.name;
-  };
+    var newComment = {
+      PostID: postID,
+      UserID: 1,
+      CommentText: $("#com").val().trim(),
+      CommentRating: rating,
+      comment_image: ""
+    };
 
-  //set up object ///need to change user id for future!
-  var newComment = {
-    PostID: postID,
-    UserID: 1,
-    CommentText: $("#com")
-      .val()
-      .trim(),
-    CommentRating: rating,
-    comment_image: photo
-  };
+    var a = newComment.PostID;
+    var b = newComment.UserID;
+    var c = newComment.CommentText;
+    var d = newComment.CommentRating;
+    var e = newComment.comment_image;
 
-  validateFormComment(newComment);
-});
+    if (a == "" || b == "" || c == "" || d == "" ) {
+      alert("Please fill out the whole form!");
+    } else {
+      //Send the POST request.
+      $.ajax("/api/comments/" + newComment.PostID, {
+        type: "POST",
+        data: newComment
+      }).then(function () {
+        console.log("posted new comment");
+        // Reload the page
+        location.reload();
+      });
+    }
+  } 
+  else 
+  {
+    var formData = new FormData();
+    formData.append("image", $("input[type=file]")[0].files[0]);
 
-function validateFormComment(newComment) {
-  var a = newComment.PostID;
-  var b = newComment.UserID;
-  var c = newComment.CommentText;
-  var d = newComment.CommentRating;
-  var e = newComment.comment_image;
-
-  if (a == "" || b == "" || c == "" || d == "" || e == "") {
-    alert("Please fill out the whole form!");
-  } else {
-    //Send the POST request.
-    $.ajax("/api/comments/" + newComment.PostID, {
+    $.ajax("/upload",{
       type: "POST",
-      data: newComment
-    }).then(function () {
-      console.log("posted new comment");
-      // Reload the page
-      location.reload();
+      data: formData,
+      processData: false,
+      contentType: false
+    }).then(function(res){
+      var cimage = res.imageUrl;
+
+      var newComment = {
+        PostID: postID,
+        UserID: 1,
+        CommentText: $("#com").val().trim(),
+        CommentRating: rating,
+        comment_image: cimage
+      };
+
+      $.ajax("/api/comments/" + newComment.PostID, {
+        type: "POST",
+        data: newComment
+      }).then(function () {
+        console.log("posted new comment");
+        // Reload the page
+        location.reload();
+      });
     });
-  }
-}
+  };
+});
 
 //UPDATE Comment Form
 $(".update-form").on("submit", function (event) {
@@ -200,88 +219,81 @@ $("#add").submit(function (event) {
     rating = 5;
   }
 
-  var zipNum = Number(
-    $("#inputZip")
-      .val()
-      .trim()
-  );
+  var lname = $("#inputLocation").val().trim();
+  var laddr = $("#inputAddress").val().trim();
+  var lcity = $("#inputCity").val().trim();
+  var lstate = $("#inputState").val().trim();
+  var zipNum = Number($("#inputZip").val().trim());
+  var lposttxt = $("#inputDescription").val().trim();
+
 
   var photo;
-
   if (document.getElementById("inputPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    var file = document.getElementById("inputPhoto").files[0]
-    photo = file.name;
-  };
-  //set up object ///need to change user id for future!
-  $.ajax("/upload",{
-    type: "POST",
-    data: { fieldname: "image", name: photo}
-  }).then(function (res) {
-    console.log(res);
-  });
-
-  var newLocation = {
-    UserID: 1,
-    LocationName: $("#inputLocation")
-      .val()
-      .trim(),
-    LocAddr: $("#inputAddress")
-      .val()
-      .trim(),
-    City: $("#inputCity")
-      .val()
-      .trim(),
-    State: $("#inputState")
-      .val()
-      .trim(),
-    Zip: zipNum,
-    PostText: $("#inputDescription")
-      .val()
-      .trim(),
-    PostRating: rating,
-    post_image: photo
+    photo = document.getElementById("inputPhoto").files[0].name;
   };
 
-  validateForm(newLocation);
-});
+  validateForm();
 
-function validateForm(newLocation) {
-  var a = newLocation.UserId;
-  var b = newLocation.LocationName;
-  var c = newLocation.LocAddr;
-  var d = newLocation.City;
-  var e = newLocation.State;
-  var f = newLocation.Zip;
-  var g = newLocation.PostText;
-  var h = newLocation.PostRating;
-  var i = newLocation.post_image;
+  function validateForm() {
+    var b = lname;
+    var c = laddr;
+    var d = lcity;
+    var e = lstate;
+    var f = zipNum;
+    var g = lposttxt;
+    var h = rating;
+    var i = photo;
+  
+    if (
+      b == "" ||
+      c == "" ||
+      d == "" ||
+      e == "" ||
+      f == "" ||
+      g == "" ||
+      h == "" ||
+      i == ""
+    ) {
+      alert("Please fill out the whole form!");
+    }
+    else
+    {
+      var formData = new FormData();
+      formData.append("image", $("input[type=file]")[0].files[0]);
 
-  if (
-    a == "" ||
-    b == "" ||
-    c == "" ||
-    d == "" ||
-    e == "" ||
-    f == "" ||
-    g == "" ||
-    h == "" ||
-    i == ""
-  ) {
-    alert("Please fill out the whole form!");
-  } else {
-    //Send the POST request.
-    $.ajax("/newlocation", {
-      type: "POST",
-      data: newLocation
-    }).then(function () {
-      console.log("posted new location");
-      // Reload the page
-      location.reload();
-    });
+      $.ajax("/upload",{
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false
+      }).then(function(res){
+        var pimage = res.imageUrl;
+
+        var newLocation = {
+          LocationName: lname,
+          LocAddr: laddr,
+          City: lcity,
+          State: lstate,
+          Zip: zipNum,
+          PostText: lposttxt,
+          PostRating: rating,
+          post_image: pimage
+        }
+
+        $.ajax("/newlocation", {
+          type: "POST",
+          data: newLocation
+        }).then(function () {
+          console.log("posted new location");
+          // Reload the page
+          location.reload();
+        });
+      });
+    }
   }
-}
+});
 
 // MAP SCRIPT
 function initMap() {
