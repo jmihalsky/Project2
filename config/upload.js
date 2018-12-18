@@ -31,7 +31,7 @@ var fileFiler = (req,file,cb) => {
 var upload = multer({
     storage: multers3({
         s3: s3,
-        bucket: aws_conn_keys.s3_bucket,
+        bucket: process.env.s3_bucket,
         acl: "public-read",
         metadata: function(req,file,cb){
             cb(null, {fieldName: file.originalname});
