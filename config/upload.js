@@ -1,16 +1,16 @@
 // require("dotenv").config({path: "./aws.env"});
-var aws_conn = require("./aws_conn.js");
+// var aws_conn = require("./aws_conn.js");
 var multer = require("multer");
 var multers3 = require("multer-s3");
 var aws = require("aws-sdk");
 
-var aws_conn_keys = aws_conn.aws_keys;
+// var aws_conn_keys = aws_conn.aws_keys;
 
-console.log(aws_conn_keys);
+// console.log(aws_conn_keys);
 
 aws.config.update({
-    secretAccessKey: aws_conn_keys.secret_access_key,
-    accessKeyId: aws_conn_keys.access_key_id,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     region: 'us-east-1'
 });
 
