@@ -7,14 +7,8 @@ var isAuthenticated = require("../config/middleware/isAuthenticated");
 var path = require("path");
 
 //AWS
-var AWS = require('aws-sdk');
-
-var s3 = new AWS.S3({
-  accessKeyId: process.env.BUCKETEER_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.BUCKETEER_AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-});
-
+var upload = require("../config/upload.js");
+var singleUpload = upload.single("image");
 
 //homepage
 router.get("/", function (req, res) {
@@ -74,9 +68,6 @@ router.post("/uploadcomment", function (req, res) {
   }
 });
 
-
-
-
 function uploadFile(file) {
 
   var params = {
@@ -95,9 +86,6 @@ function uploadFile(file) {
   });
 
 };
-
-
-
 
 // comment - post route
 router.post("/api/comments/:id", function (req, res) {
@@ -151,15 +139,14 @@ router.get("/zip_search/:zip", function (req, res) {
 
 //Uploading "new post images!"
 router.post("/upload", function (req, res) {
-
-  if (Object.keys(req.files).length == 0) {
-    res.status(400).send("No files were uploaded.");
-    return;
-  } else {
-    var file = req.files.commentPhoto;
-    uploadFile(file);
-    //getSignedRequest(file);
-  }
+  console.log("upload file");
+  singleUpload(req,res,function(err,some){
+      if(err)
+      {
+          return res.status(422).send({errors: [{title: "image upload error",detail: err.message}]});
+      }
+      return res.json({"imageUrl": req.file.location});
+  });
 });
 
 //Sending new Location to MySQL
