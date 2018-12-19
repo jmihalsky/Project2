@@ -85,7 +85,7 @@ $(".delete-com").on("click", function(event) {
 });
 
 //ADD REVIEW (photo upload sent through /uploadcomment api call seperately)
-$("#add-comm").submit(function (event) {
+$("#add-comm").submit(function(event) {
   event.preventDefault();
 
   var postID = Number($(this).attr("name"));
@@ -110,66 +110,49 @@ $("#add-comm").submit(function (event) {
   var photo;
 
   if (document.getElementById("inputCommentPhoto").files[0] == undefined) {
-    var newComment = {
-      PostID: postID,
-      UserID: 1,
-      CommentText: $("#com").val().trim(),
-      CommentRating: rating,
-      comment_image: ""
-    };
+    photo = "";
+  } else {
+    var file = document.getElementById("inputCommentPhoto").files[0];
+    photo =
+      "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" +
+      file.name;
+  }
 
-    var a = newComment.PostID;
-    var b = newComment.UserID;
-    var c = newComment.CommentText;
-    var d = newComment.CommentRating;
-    var e = newComment.comment_image;
-
-    if (a == "" || b == "" || c == "" || d == "" ) {
-      alert("Please fill out the whole form!");
-    } else {
-      //Send the POST request.
-      $.ajax("/api/comments/" + newComment.PostID, {
-        type: "POST",
-        data: newComment
-      }).then(function () {
-        console.log("posted new comment");
-        // Reload the page
-        location.reload();
-      });
-    }
-  } 
-  else 
-  {
-    var formData = new FormData();
-    formData.append("image", $("input[type=file]")[0].files[0]);
-
-    $.ajax("/upload",{
-      type: "POST",
-      data: formData,
-      processData: false,
-      contentType: false
-    }).then(function(res){
-      var cimage = res.imageUrl;
-
-      var newComment = {
-        PostID: postID,
-        UserID: 1,
-        CommentText: $("#com").val().trim(),
-        CommentRating: rating,
-        comment_image: cimage
-      };
-
-      $.ajax("/api/comments/" + newComment.PostID, {
-        type: "POST",
-        data: newComment
-      }).then(function () {
-        console.log("posted new comment");
-        // Reload the page
-        location.reload();
-      });
-    });
+  //set up object ///need to change user id for future!
+  var newComment = {
+    PostID: postID,
+    UserID: 1,
+    CommentText: $("#com")
+      .val()
+      .trim(),
+    CommentRating: rating,
+    comment_image: photo
   };
+
+  validateFormComment(newComment);
 });
+
+function validateFormComment(newComment) {
+  var a = newComment.PostID;
+  var b = newComment.UserID;
+  var c = newComment.CommentText;
+  var d = newComment.CommentRating;
+  var e = newComment.comment_image;
+
+  if (a == "" || b == "" || c == "" || d == "" || e == "") {
+    alert("Please fill out the whole form!");
+  } else {
+    //Send the POST request.
+    $.ajax("/api/comments/" + newComment.PostID, {
+      type: "POST",
+      data: newComment
+    }).then(function() {
+      console.log("posted new comment");
+      // Reload the page
+      location.reload();
+    });
+  }
+}
 
 //UPDATE Comment Form
 $(".update-form").on("submit", function(event) {
@@ -199,7 +182,7 @@ $(".update-form").on("submit", function(event) {
 });
 
 //ADD POST (photo upload sent through /upload api call seperately)
-$("#add").submit(function (event) {
+$("#add").submit(function(event) {
   event.preventDefault();
   //determines rating
   var rating = 0;
@@ -219,81 +202,83 @@ $("#add").submit(function (event) {
     rating = 5;
   }
 
-  var lname = $("#inputLocation").val().trim();
-  var laddr = $("#inputAddress").val().trim();
-  var lcity = $("#inputCity").val().trim();
-  var lstate = $("#inputState").val().trim();
-  var zipNum = Number($("#inputZip").val().trim());
-  var lposttxt = $("#inputDescription").val().trim();
-
+  var zipNum = Number(
+    $("#inputZip")
+      .val()
+      .trim()
+  );
 
   var photo;
+
   if (document.getElementById("inputPhoto").files[0] == undefined) {
     photo = "";
   } else {
-    photo = document.getElementById("inputPhoto").files[0].name;
+    var file = document.getElementById("inputPhoto").files[0];
+    photo =
+      "https://bucketeer-45d5c43b-2ff6-4a16-beaa-63888ef7bd29.s3.amazonaws.com/public/" +
+      file.name;
+  }
+  //set up object ///need to change user id for future!
+  var newLocation = {
+    UserID: 1,
+    LocationName: $("#inputLocation")
+      .val()
+      .trim(),
+    LocAddr: $("#inputAddress")
+      .val()
+      .trim(),
+    City: $("#inputCity")
+      .val()
+      .trim(),
+    State: $("#inputState")
+      .val()
+      .trim(),
+    Zip: zipNum,
+    PostText: $("#inputDescription")
+      .val()
+      .trim(),
+    PostRating: rating,
+    post_image: photo
   };
 
-  validateForm();
-
-  function validateForm() {
-    var b = lname;
-    var c = laddr;
-    var d = lcity;
-    var e = lstate;
-    var f = zipNum;
-    var g = lposttxt;
-    var h = rating;
-    var i = photo;
-  
-    if (
-      b == "" ||
-      c == "" ||
-      d == "" ||
-      e == "" ||
-      f == "" ||
-      g == "" ||
-      h == "" ||
-      i == ""
-    ) {
-      alert("Please fill out the whole form!");
-    }
-    else
-    {
-      var formData = new FormData();
-      formData.append("image", $("input[type=file]")[0].files[0]);
-
-      $.ajax("/upload",{
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false
-      }).then(function(res){
-        var pimage = res.imageUrl;
-
-        var newLocation = {
-          LocationName: lname,
-          LocAddr: laddr,
-          City: lcity,
-          State: lstate,
-          Zip: zipNum,
-          PostText: lposttxt,
-          PostRating: rating,
-          post_image: pimage
-        }
-
-        $.ajax("/newlocation", {
-          type: "POST",
-          data: newLocation
-        }).then(function () {
-          console.log("posted new location");
-          // Reload the page
-          location.reload();
-        });
-      });
-    }
-  }
+  validateForm(newLocation);
 });
+
+function validateForm(newLocation) {
+  var a = newLocation.UserId;
+  var b = newLocation.LocationName;
+  var c = newLocation.LocAddr;
+  var d = newLocation.City;
+  var e = newLocation.State;
+  var f = newLocation.Zip;
+  var g = newLocation.PostText;
+  var h = newLocation.PostRating;
+  var i = newLocation.post_image;
+
+  if (
+    a == "" ||
+    b == "" ||
+    c == "" ||
+    d == "" ||
+    e == "" ||
+    f == "" ||
+    g == "" ||
+    h == "" ||
+    i == ""
+  ) {
+    alert("Please fill out the whole form!");
+  } else {
+    //Send the POST request.
+    $.ajax("/newlocation", {
+      type: "POST",
+      data: newLocation
+    }).then(function() {
+      console.log("posted new location");
+      // Reload the page
+      location.reload();
+    });
+  }
+}
 
 // MAP SCRIPT
 function initMap() {
